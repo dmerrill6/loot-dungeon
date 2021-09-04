@@ -22,7 +22,7 @@ module.exports = async function(deployer, network) {
   if (!lootComponentsAddress) {
     await deployer.deploy(LootComponents);
     await LootComponents.deployed();
-    lootComponentsAddress = Lootcomponents.address,
+    lootComponentsAddress = LootComponents.address;
   }
 
 
@@ -56,13 +56,13 @@ module.exports = async function(deployer, network) {
   await LootStats.deployed();
   await deployer.deploy(
     LootDungeon,
-    vrfCoordinator,
+    vrfCoord,
     link,
     keyhash,
     chainlinkFee,
     proxyRegistryAddress,
     lootAddress,
-    lootStatsAddress,
+    // lootStatsAddress,
     network === 'test'
   )
 };

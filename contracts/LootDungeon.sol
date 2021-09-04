@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
-import "./LootStats.sol";
 
 contract OwnableDelegateProxy {}
 
@@ -83,9 +82,9 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         Monster(
             "Skeleton Warrior",
             SKELETON_ID,
-            10,
+            12,
             1,
-            4,
+            6,
             4,
             2,
             SKELETON_BONES,
@@ -100,7 +99,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             2,
             10,
             7,
-            4,
+            7,
             MINOTAUR_HORNS,
             MINOTAUR_CARD
         );
@@ -109,9 +108,9 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         Monster(
             "Succubus",
             SUCCUBUS_ID,
+            10,
+            2,
             20,
-            3,
-            14,
             10,
             5,
             SUCCUBUS_WINGS,
@@ -119,17 +118,17 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         );
 
     Monster public Demon =
-        Monster("Demon", DEMON_ID, 25, 4, 16, 5, 20, DEMON_HEAD, DEMON_CARD);
+        Monster("Demon", DEMON_ID, 15, 4, 15, 5, 20, DEMON_HEAD, DEMON_CARD);
 
     Monster public Dragon =
         Monster(
             "Fire Dragon",
             DRAGON_ID,
             30,
-            6,
+            5,
             25,
             0,
-            5,
+            0,
             DRAGON_EYE,
             DRAGON_CARD
         );
@@ -160,14 +159,13 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public escapePrice = 0.04 ether;
     uint256 public battlePrice = 0.02 ether;
     uint256 public ferrymanPrice = 5 ether;
-    Item public basePlayerStats = Item(20, 1, 1, 1, 1);
+    Item public basePlayerStats = Item(10, 0, 1, 1, 1);
 
     address public proxyRegistryAddress;
     address public lootAddress; // 0xFF9C1b15B16263C61d017ee9F65C50e4AE0113D7;
     address public lootComponentsAddress; //0x3eb43b1545a360d1D065CB7539339363dFD445F3
-    address public lootStatsAddress;
 
-    mapping(uint256 => address) private lootOwners;
+    mapping(uint256 => address) public lootOwners;
     mapping(uint256 => uint256) public lootTimeLock;
     mapping(uint256 => uint256) private tokenIdToEnterDungeonRollResult;
     mapping(uint256 => Monster) private tokenIdEncounteredMonster;
@@ -199,7 +197,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         uint256 fee,
         address _proxyRegistryAddress,
         address _lootAddress,
-        address _lootStatsAddress,
         bool _isTestNetwork
     )
         ERC1155("https://[MY_DOMAIN]/api/item/{id}.json")
@@ -217,7 +214,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
         proxyRegistryAddress = _proxyRegistryAddress;
         lootAddress = _lootAddress;
-        lootStatsAddress = _lootStatsAddress;
 
         isTestNetwork = _isTestNetwork;
 
@@ -743,45 +739,75 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         return uint256(keccak256(abi.encodePacked(input, blockComponent)));
     }
 
-    // Stats calculation
-    /*
-     * Weapon: Attack, Agility, Dexterity
-     * Chest: Base HP
-     * Head: Armor
-     * Waist: Armor
-     * Foot: Agility
-     * Hand: Dexterity
-     * Neck and Ring: Only suffix bonus
-     */
+    function _lootOgRandom(string memory input)
+        internal
+        pure
+        returns (uint256)
+    {
+        return uint256(keccak256(abi.encodePacked(input)));
+    }
 
+    /**
+     * WEAPON: Atk
+     * CHEST: Armor
+     * HEAD: HP
+     * WAIST: HP
+     * FOOT: AGI
+     * HAND: DEX
+     * NECK: Random
+     * RING: Random
+     */
     function getStats(uint256 tokenId) public view returns (Item memory) {
-        LootStats stats = LootStats(lootStatsAddress);
-        LootStats.Item memory weaponStats = stats.getWeaponStats(tokenId);
-        LootStats.Item memory armorStats = stats.getArmorStats(tokenId);
-        LootStats.Item memory accessoryStats = stats.getAccessoryStats(tokenId);
+        uint256 hpBonus = (_lootOgRandom(
+            string(abi.encodePacked("HEAD", toString(tokenId)))
+        ) % 21) +
+            (_lootOgRandom(
+                string(abi.encodePacked("WAIST", toString(tokenId)))
+            ) % 21);
+
+        uint256 armorBonus = _lootOgRandom(
+            string(abi.encodePacked("CHEST", toString(tokenId)))
+        ) % 21;
+
+        uint256 attackBonus = _lootOgRandom(
+            string(abi.encodePacked("WEAPON", toString(tokenId)))
+        ) % 21;
+
+        uint256 agiBonus = _lootOgRandom(
+            string(abi.encodePacked("FOOT", toString(tokenId)))
+        ) % 21;
+
+        uint256 dexBonus = _lootOgRandom(
+            string(abi.encodePacked("HAND", toString(tokenId)))
+        ) % 21;
+
+        uint256 neckBonus = _lootOgRandom(
+            string(abi.encodePacked("NECK", toString(tokenId)))
+        ) % 21;
+
+        uint256 ringBonus = _lootOgRandom(
+            string(abi.encodePacked("RING", toString(tokenId)))
+        ) % 21;
+
+        if (neckBonus < 4) {
+            dexBonus += ringBonus / 3 + 1;
+        } else if (neckBonus < 8) {
+            agiBonus += ringBonus / 3 + 1;
+        } else if (neckBonus < 12) {
+            hpBonus += ringBonus / 3 + 1;
+        } else if (neckBonus < 16) {
+            attackBonus += ringBonus / 4 + 1;
+        } else {
+            armorBonus += ringBonus / 5 + 1;
+        }
 
         return
             Item(
-                basePlayerStats.hp +
-                    weaponStats.hp +
-                    armorStats.hp +
-                    accessoryStats.hp,
-                basePlayerStats.armor +
-                    weaponStats.armor +
-                    armorStats.armor +
-                    accessoryStats.armor,
-                basePlayerStats.attack +
-                    weaponStats.attack +
-                    armorStats.attack +
-                    accessoryStats.attack,
-                basePlayerStats.agility +
-                    weaponStats.agility +
-                    armorStats.agility +
-                    accessoryStats.agility,
-                basePlayerStats.dexterity +
-                    weaponStats.dexterity +
-                    armorStats.dexterity +
-                    accessoryStats.dexterity
+                basePlayerStats.hp + hpBonus / 2,
+                basePlayerStats.armor + armorBonus / 4,
+                basePlayerStats.attack + attackBonus / 2,
+                basePlayerStats.agility + agiBonus / 2,
+                basePlayerStats.dexterity + dexBonus / 2
             );
     }
 
@@ -830,6 +856,10 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         );
 
         IERC721 lootContract = IERC721(lootAddress);
+        lootOwners[tokenId] = address(0x0);
+        tokenIdToEnterDungeonRollResult[tokenId] = uint256(0x0);
+        tokenIdToMonsterBattleRollResult[tokenId] = uint256(0x0);
+        lootTimeLock[tokenId] = uint256(0x0);
         lootContract.transferFrom(address(this), owner(), tokenId);
     }
 
@@ -854,7 +884,27 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         basePlayerStats = newStats;
     }
 
-    function changeStatsContract(address newAddress) external onlyOwner {
-        lootStatsAddress = newAddress;
+    // Lib
+
+    function toString(uint256 value) internal pure returns (string memory) {
+        // Inspired by OraclizeAPI's implementation - MIT license
+        // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
+
+        if (value == 0) {
+            return "0";
+        }
+        uint256 temp = value;
+        uint256 digits;
+        while (temp != 0) {
+            digits++;
+            temp /= 10;
+        }
+        bytes memory buffer = new bytes(digits);
+        while (value != 0) {
+            digits -= 1;
+            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
+            value /= 10;
+        }
+        return string(buffer);
     }
 }

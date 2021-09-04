@@ -15,25 +15,37 @@ const RAT_MEAT = 3;
 
 contract("LootDungeon", accounts => {
   const tokenId = 2;
-  const tokenIdAccount1 = 1;
+  const tokenIdAccount1 = 4370;
   let dungeon, loot;
   let initialMonsterAmount = 0;
+  let mainAccount;
 
+  const printStats = async (tokenId) => {
+    const stats = await dungeon.getStats(tokenId);
+  
+    console.log(`${tokenId}: hp: ${stats.hp}, armor: ${stats.armor}, attack: ${stats.attack}, agi: ${stats.agility}, dex: ${stats.dexterity}`);
+  }
   
   before(async () => {
+    mainAccount = accounts[2];
     dungeon = await LootDungeon.deployed();
     loot = await Loot.deployed()
 
-    await loot.claim(tokenId, {from: accounts[0]})
+    await loot.claim(tokenId, {from: mainAccount})
     await loot.claim(tokenIdAccount1, {from: accounts[1]})
     initialMonsterAmount = await dungeon.getRemainingMonsterCount()
+
+    for (let i = 1; i< 10; i++) {
+      await printStats(i);
+    }
+    await printStats(4370);
   })
 
   describe('entering the dungeon', () => {
     it("should block entering the dungeon if user does not have loot", async () => {
       let err
       try {
-        await dungeon.enterTheDungeon(tokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(tokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -44,7 +56,7 @@ contract("LootDungeon", accounts => {
     it("should block entering the dungeon if user has not approved the loot transfer", async () => {  
       let err
       try {
-        await dungeon.enterTheDungeon(tokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(tokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -53,7 +65,7 @@ contract("LootDungeon", accounts => {
     });
     
     it("should permit transfer", async () => {
-      await loot.setApprovalForAll(dungeon.address, true, {from: accounts[0]})
+      await loot.setApprovalForAll(dungeon.address, true, {from: mainAccount})
     })
 
     it("should allow entering the dungeon if the user approved the transfer", async () => {
@@ -62,7 +74,7 @@ contract("LootDungeon", accounts => {
   
       let err
       try {
-        await dungeon.enterTheDungeon(tokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(tokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -76,7 +88,7 @@ contract("LootDungeon", accounts => {
       const newOwner = await loot.ownerOf.call(tokenId);
       const contractTokenOwner = await dungeon.getLootOwner.call(tokenId)
       assert.equal(newOwner, dungeon.address)
-      assert.equal(contractTokenOwner, accounts[0])
+      assert.equal(contractTokenOwner, mainAccount)
     })
 
     it("should encounter a monster", async () => {
@@ -86,7 +98,7 @@ contract("LootDungeon", accounts => {
 
     it('should mint a loot token wrapper', async () => {
       const id = await dungeon.lootIdToWrappedLootId(tokenId)
-      let balance = await dungeon.balanceOf(accounts[0], id);
+      let balance = await dungeon.balanceOf(mainAccount, id);
 
       assert.equal(balance, 1);
     })
@@ -112,7 +124,7 @@ contract("LootDungeon", accounts => {
     it("should not allow reentering the dungeon", async () => {  
       let err
       try {
-        await dungeon.enterTheDungeon(tokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(tokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -125,7 +137,7 @@ contract("LootDungeon", accounts => {
     it("should not allow escaping using a non-owned token", async () => {  
       let err
       try {
-        await dungeon.escapeFromDungeon(tokenIdAccount1, { from: accounts[0] });
+        await dungeon.escapeFromDungeon(tokenIdAccount1, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -136,7 +148,7 @@ contract("LootDungeon", accounts => {
     it("should not allow claiming the escape NFT before escaping", async () => {  
       let err
       try {
-        await dungeon.claimEscapeCard({ from: accounts[0] });
+        await dungeon.claimEscapeCard({ from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -147,7 +159,7 @@ contract("LootDungeon", accounts => {
     it("should not allow escaping without paying the fee", async () => {  
       let err
       try {
-        await dungeon.escapeFromDungeon(tokenId, { from: accounts[0] });
+        await dungeon.escapeFromDungeon(tokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -160,7 +172,7 @@ contract("LootDungeon", accounts => {
       expect(hasEntered).to.equal(true);
       let err
       try {
-        await dungeon.escapeFromDungeon(tokenId, { from: accounts[0], value: web3.utils.toWei("0.04", "ether") });
+        await dungeon.escapeFromDungeon(tokenId, { from: mainAccount, value: web3.utils.toWei("0.04", "ether") });
       } catch (error) {
         err = error;
       }
@@ -173,52 +185,52 @@ contract("LootDungeon", accounts => {
     it("should return the loot to the original user", async () => {
       const newOwner = await loot.ownerOf.call(tokenId);
       const contractTokenOwner = await dungeon.getLootOwner.call(tokenId)
-      assert.equal(newOwner, accounts[0])
+      assert.equal(newOwner, mainAccount)
       assert.equal(contractTokenOwner, "0x0000000000000000000000000000000000000000")
     })
 
     it('should burn the loot token wrapper', async () => {
       const id = await dungeon.lootIdToWrappedLootId(tokenId)
-      let balance = await dungeon.balanceOf(accounts[0], id);
+      let balance = await dungeon.balanceOf(mainAccount, id);
 
       assert.equal(balance, 0);
     })
 
     it("should inc the amount of available monsters", async () => {
-      const amount = await dungeon.getRemainingMonsterCount()
+      const amount = await dungeon.getRemainingMonsterCount.call()
       assert.equal(amount.toString(), initialMonsterAmount.toString())
     })
 
     it("should allow claiming the escape NFT after escaping", async () => {  
       let err
       try {
-        await dungeon.claimEscapeCard({ from: accounts[0] });
+        await dungeon.claimEscapeCard({ from: mainAccount });
       } catch (error) {
         err = error;
       }
 
       assert.equal(err, null);
-      const balance = await dungeon.balanceOf.call(accounts[0], ESCAPE_CARD);
+      const balance = await dungeon.balanceOf.call(mainAccount, ESCAPE_CARD);
       assert.equal(balance, 1);
     });
 
     it("should not allow claiming the escape NFT twice", async () => {  
       let err
       try {
-        await dungeon.claimEscapeCard({ from: accounts[0] });
+        await dungeon.claimEscapeCard({ from: mainAccount });
       } catch (error) {
         err = error;
       }
 
       assert.equal(err.message, "Returned error: VM Exception while processing transaction: revert Escape NFT not ready to be claimed -- Reason given: Escape NFT not ready to be claimed.");
-      const balance = await dungeon.balanceOf.call(accounts[0], ESCAPE_CARD);
+      const balance = await dungeon.balanceOf.call(mainAccount, ESCAPE_CARD);
       assert.equal(balance, 1);
     });
 
     it("should not allow battling after escaping", async () => {  
       let err
       try {
-        await dungeon.battleMonster(tokenId, { from: accounts[0], value: web3.utils.toWei("0.02", "ether") });
+        await dungeon.battleMonster(tokenId, { from: mainAccount, value: web3.utils.toWei("0.02", "ether") });
       } catch (error) {
         err = error;
       }
@@ -234,7 +246,7 @@ contract("LootDungeon", accounts => {
   
       let err
       try {
-        await dungeon.enterTheDungeon(tokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(tokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -247,21 +259,21 @@ contract("LootDungeon", accounts => {
 
   describe('when calculating stats', () => {
     it('calculates the stats correctly', async () => {
-      const mostOpLoot = 3043;
+      const mostOpLoot = 2465;
       const stats = await dungeon.getStats(mostOpLoot);
-      console.log(stats);
+      await printStats(mostOpLoot);
       expect(parseInt(stats.hp, 10)).to.be.above(30);
-      expect(parseInt(stats.armor, 10)).to.be.above(3);
-      expect(parseInt(stats.attack, 10)).to.be.above(12);
-      expect(parseInt(stats.agility, 10)).to.be.above(12);
-      expect(parseInt(stats.dexterity, 10)).to.be.above(5);
+      expect(parseInt(stats.armor, 10)).to.be.above(4);
+      expect(parseInt(stats.attack, 10)).to.be.above(10);
+      expect(parseInt(stats.agility, 10)).to.be.above(5);
+      expect(parseInt(stats.dexterity, 10)).to.be.above(2);
     })
 
     it('calculates the stats for a mediocre loot', async () => {
-      const mediocreLoot = 3455;
+      const mediocreLoot = 3791;
       const stats = await dungeon.getStats(mediocreLoot);
-      console.log(stats);
-      expect(parseInt(stats.hp, 10)).to.be.below(25);
+      await printStats(mediocreLoot);
+      expect(parseInt(stats.hp, 10)).to.be.below(26);
       expect(parseInt(stats.armor, 10)).to.be.below(2);
       expect(parseInt(stats.attack, 10)).to.be.below(5);
       expect(parseInt(stats.agility, 10)).to.be.below(4);
@@ -284,7 +296,7 @@ contract("LootDungeon", accounts => {
     it("should not allow battling if not paying the fee", async () => {  
       let err
       try {
-        await dungeon.battleMonster(tokenId, { from: accounts[0], value: web3.utils.toWei("0.01", "ether") });
+        await dungeon.battleMonster(tokenId, { from: mainAccount, value: web3.utils.toWei("0.01", "ether") });
       } catch (error) {
         err = error;
       }
@@ -297,7 +309,7 @@ contract("LootDungeon", accounts => {
       let hasBattleStarted = await dungeon.hasStartedBattle.call(tokenId);
       expect(hasBattleStarted).to.equal(false);
       try {
-        await dungeon.battleMonster(tokenId, { from: accounts[0], value: web3.utils.toWei("0.02", "ether") });
+        await dungeon.battleMonster(tokenId, { from: mainAccount, value: web3.utils.toWei("0.02", "ether") });
       } catch (error) {
         err = error;
       }
@@ -330,20 +342,22 @@ contract("LootDungeon", accounts => {
     })
 
     it('should be able to claim rewards if won', async () => {
-      let err
+        const currOwner = await dungeon.lootOwners.call(tokenId)
+        console.log('currOwner', currOwner, mainAccount)
+        let err
       try {
-        await dungeon.claimDrops(tokenId)
+        await dungeon.claimDrops(tokenId, {from: mainAccount})
       } catch (error) {
         err = error;
       }
 
       assert.equal(err, null);
       const newLootOwner = await loot.ownerOf.call(tokenId)
-      expect(newLootOwner).to.equal(accounts[0]);
+      expect(newLootOwner).to.equal(mainAccount);
       const contractTokenOwner = await dungeon.getLootOwner.call(tokenId)
       assert.equal(contractTokenOwner, "0x0000000000000000000000000000000000000000")
       
-      const balance = await dungeon.balanceOf.call(accounts[0], RAT_MEAT);
+      const balance = await dungeon.balanceOf.call(mainAccount, RAT_MEAT);
       assert.equal(balance, 1);
     })
 
@@ -355,7 +369,7 @@ contract("LootDungeon", accounts => {
 
     it('should burn the loot token wrapper', async () => {
       const id = await dungeon.lootIdToWrappedLootId(tokenId)
-      let balance = await dungeon.balanceOf(accounts[0], id);
+      let balance = await dungeon.balanceOf(mainAccount, id);
 
       assert.equal(balance, 0);
     })
@@ -371,7 +385,7 @@ contract("LootDungeon", accounts => {
   
       let err
       try {
-        await dungeon.enterTheDungeon(tokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(tokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -385,13 +399,13 @@ contract("LootDungeon", accounts => {
   describe('when dying', () => {
     let newTokenId = 201;
     it("should allow entering the dungeon after battling with a different token", async () => {
-      await loot.claim(newTokenId, {from: accounts[0]})
+      await loot.claim(newTokenId, {from: mainAccount})
       let hasEntered = await dungeon.hasEnteredTheDungeon.call(newTokenId);
       assert.equal(hasEntered, false);
   
       let err
       try {
-        await dungeon.enterTheDungeon(newTokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(newTokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -407,7 +421,7 @@ contract("LootDungeon", accounts => {
     it("should not allow claiming the ferryman card before dying", async () => {  
       let err
       try {
-        await dungeon.claimFerrymanCard({ from: accounts[0] });
+        await dungeon.claimFerrymanCard({ from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -420,7 +434,7 @@ contract("LootDungeon", accounts => {
       let hasBattleStarted = await dungeon.hasStartedBattle.call(newTokenId);
       expect(hasBattleStarted).to.equal(false);
       try {
-        await dungeon.battleMonster(newTokenId, { from: accounts[0], value: web3.utils.toWei("0.02", "ether") });
+        await dungeon.battleMonster(newTokenId, { from: mainAccount, value: web3.utils.toWei("0.02", "ether") });
       } catch (error) {
         err = error;
       }
@@ -458,7 +472,7 @@ contract("LootDungeon", accounts => {
     it('should not be able to claim the rewards', async () => {
       let err
       try {
-        await dungeon.claimDrops(newTokenId)
+        await dungeon.claimDrops(newTokenId, {from: mainAccount})
       } catch (error) {
         err = error;
       }
@@ -469,7 +483,7 @@ contract("LootDungeon", accounts => {
     it("should not allow battling if dead", async () => {  
       let err
       try {
-        await dungeon.battleMonster(newTokenId, { from: accounts[0], value: web3.utils.toWei("0.02", "ether") });
+        await dungeon.battleMonster(newTokenId, { from: mainAccount, value: web3.utils.toWei("0.02", "ether") });
       } catch (error) {
         err = error;
       }
@@ -482,7 +496,7 @@ contract("LootDungeon", accounts => {
     it("should not allow reentering the dungeon", async () => {  
       let err
       try {
-        await dungeon.enterTheDungeon(newTokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(newTokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -493,7 +507,7 @@ contract("LootDungeon", accounts => {
     it("should not allow reviving if not paying", async () => {  
       let err
       try {
-        await dungeon.bribeFerryman(newTokenId);
+        await dungeon.bribeFerryman(newTokenId, {from: mainAccount});
       } catch (error) {
         err = error;
       }
@@ -504,7 +518,7 @@ contract("LootDungeon", accounts => {
     it("should allow reviving", async () => {  
       let err
       try {
-        await dungeon.bribeFerryman(newTokenId, { from: accounts[0], value: web3.utils.toWei("5", "ether") });
+        await dungeon.bribeFerryman(newTokenId, { from: mainAccount, value: web3.utils.toWei("5", "ether") });
       } catch (error) {
         err = error;
       }
@@ -517,20 +531,20 @@ contract("LootDungeon", accounts => {
     it("should allow claiming the ferryman card", async () => {  
       let err
       try {
-        await dungeon.claimFerrymanCard({ from: accounts[0] });
+        await dungeon.claimFerrymanCard({ from: mainAccount });
       } catch (error) {
         err = error;
       }
 
       assert.equal(err, null);
-      const balance = await dungeon.balanceOf.call(accounts[0], FERRYMAN_CARD);
+      const balance = await dungeon.balanceOf.call(mainAccount, FERRYMAN_CARD);
       assert.equal(balance, 1);
     });
 
     it("should not allow claiming the ferryman card twice", async () => {  
       let err
       try {
-        await dungeon.claimFerrymanCard({ from: accounts[0] });
+        await dungeon.claimFerrymanCard({ from: mainAccount });
       } catch (error) {
         err = error;
       }
@@ -544,7 +558,7 @@ contract("LootDungeon", accounts => {
   
       let err
       try {
-        await dungeon.enterTheDungeon(newTokenId, { from: accounts[0] });
+        await dungeon.enterTheDungeon(newTokenId, { from: mainAccount });
       } catch (error) {
         err = error;
       }
