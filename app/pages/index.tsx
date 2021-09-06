@@ -20,7 +20,7 @@ const Home: NextPage = () => {
           Bring your Loot. Battle monsters. Earn NFT rewards.
         </p>
         <Image
-          src="/meta.png"
+          src="/loot-dungeon.png"
           alt="Loot Dungeon image"
           width={500}
           height={280}

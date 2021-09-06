@@ -125,7 +125,7 @@ export default function NotStarted({
   return (
     <div className="center">
       <Image
-        src="/meta.png"
+        src="/loot-dungeon.png"
         alt="Loot Dungeon image"
         className={styles.story_image}
         width={500}
