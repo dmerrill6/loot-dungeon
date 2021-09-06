@@ -32,7 +32,7 @@ export default function Layout({
 const title = 'Loot Dungeon: Fight monsters and get NFT rewards'
 const description = `Loot Dungeon is a game built on top of Loot Project where you can enter dungeons and fight monsters. 
 Each monster drops unique and rare items that can be sold on the secondary market. Are you up to the challenge?`
-const domain = 'https://lootdungeon.gg'
+const domain = 'https://lootdungeon.app'
 
 function Head(): ReactElement {
   return (
