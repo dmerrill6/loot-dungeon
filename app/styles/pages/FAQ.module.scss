@@ -4,6 +4,10 @@
   margin: 0 auto;
 }
 
+.title {
+  text-align: center;
+}
+
 .item {
   & .question {
     cursor: pointer;

@@ -40,7 +40,7 @@ export default function Entered({
         You venture into the cave, following the light source. As you go deeper,
         you notice that the corridors start getting wider and wider. You finally
         reach a big chamber with torches hanging on the walls. "This is where
-        the light came from.", you realize. Suddenly, you see shadows quickly
+        the light came from", you realize. Suddenly, you see shadows quickly
         approaching from your right. You see a living being.
       </p>
       <Image

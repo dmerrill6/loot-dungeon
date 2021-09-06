@@ -152,7 +152,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public escapePrice = 0.04 ether;
     uint256 public battlePrice = 0.02 ether;
     uint256 public ferrymanPrice = 2 ether;
-    Item public basePlayerStats = Item(10, 0, 1, 1, 1);
+    Item public basePlayerStats = Item(10, 0, 2, 1, 1);
     bool public lockSettings = false;
     uint256 public maxRoundsPerBattle = 7;
 
@@ -561,7 +561,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             false
         ).mod(20).add(1);
 
-        // Player hit
+        // Player miss
         if (playerAccuracyRoll + playerStats.dexterity < currMonster.agility) {
             return 0;
         }

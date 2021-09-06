@@ -43,6 +43,15 @@ export default [
     ),
   },
   {
+    q: 'Is the smart contract audited/tested?',
+    a: (
+      <p>
+        The smart contract is not audited, so use it at your own risk. It is
+        fully tested though. The link to the tests will be uploaded soon.
+      </p>
+    ),
+  },
+  {
     q: 'How is the encountered monster determined?',
     a: (
       <>
@@ -158,6 +167,17 @@ export default [
     ),
   },
   {
+    q: 'Do all stats have the same scaling?',
+    a: (
+      <p>
+        Yes, except for the ARM. If a HEAD armor has the same rarity than a
+        CHEST armor, the amount of HP given by the HEAD will be twice as much as
+        the ARM given by the CHEST. Also, unlike other stats, there are two
+        pieces of armor that add up to HP (HEAD and WAIST).
+      </p>
+    ),
+  },
+  {
     q: 'What are the fees for participating?',
     a: (
       <p>
@@ -189,7 +209,7 @@ export default [
     ),
   },
   {
-    q: 'Can variables in the smart contract be changed?',
+    q: 'Can the variables in the smart contract be changed?',
     a: (
       <p>
         The owner of the contract can adjust the following variables: Monster
@@ -198,6 +218,32 @@ export default [
         soon as the authors are confident on the values, they will call the
         `lockFromAdditionalChanges` function which locks the contract from any
         additional adjustment.
+      </p>
+    ),
+  },
+  {
+    q: 'My transaction was confirmed but the website state did not change.',
+    a: (
+      <p>
+        Please wait a few seconds for any changes and if still nothing happens,
+        you can reload safely. The state is backed up at the smart contract
+        level so never be afraid of reloading the site.
+      </p>
+    ),
+  },
+  {
+    q: 'My question is not answered here',
+    a: (
+      <p>
+        Go to our{' '}
+        <a
+          href="https://discord.gg/z6azBRgZ3J"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Discord
+        </a>{' '}
+        and ask as much as you want.
       </p>
     ),
   },

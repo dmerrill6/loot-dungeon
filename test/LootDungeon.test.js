@@ -637,7 +637,7 @@ contract("LootDungeon", (accounts) => {
   describe("misc", () => {
     it("the domain is correct", async () => {
       let uri = await dungeon.uri.call(0);
-      assert.equal(uri, "https://lootdungeon.app/api/item/0");
+      assert.equal(uri, "https://lootdungeon.app/api/item/{id}");
     });
 
     it("only owner", async () => {

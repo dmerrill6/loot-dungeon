@@ -66,6 +66,22 @@ const Home: NextPage = () => {
           <Link href={`https://opensea.io/`}>OpenSea</Link>
         </div>
       </div>
+      <div className={styles.social}>
+        <a
+          href="https://discord.gg/z6azBRgZ3J"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Discord
+        </a>
+        <a
+          href="https://twitter.com/LootDungeonApp"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Twitter
+        </a>
+      </div>
     </Layout>
   )
 }
