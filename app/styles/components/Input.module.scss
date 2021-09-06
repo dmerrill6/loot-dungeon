@@ -1,0 +1,16 @@
+.input {
+  color: var(--color-black-2);
+  font-size: 1.2rem;
+	margin: 0 auto;
+  padding: 1.5rem 2rem;
+  border-radius: 0.2rem;
+  background-color: var(--color-white);
+  border: none;
+  display: block;
+  border-bottom: 0.3rem solid transparent;
+  transition: width 0.3s;
+
+  &:focus-visible {
+    outline: var(--color-blue) auto 1px;
+  }
+}

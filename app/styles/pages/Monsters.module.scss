@@ -1,0 +1,29 @@
+
+.container {
+  padding: 30px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+}
+
+.monster {
+  margin-top: 100px;
+  & .monster_description {
+    justify-content:first baseline;
+    flex-direction:  row;
+    display: flex;
+    & .monster_img {
+      width: 128px;
+      height: 128px;
+      flex: 0 0 128px;
+    }
+    & .desc_and_stats {
+      flex: 1;
+      margin-left: 20px;
+      flex-direction: column;
+    }
+  }
+}

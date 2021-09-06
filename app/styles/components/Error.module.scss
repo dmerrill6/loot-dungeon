@@ -1,0 +1,15 @@
+.container {
+  padding: 10px 20px;
+  margin: 40px 0;
+  color: var(--color-black-1);
+  text-align: justify;
+  &.error {
+    background-color: var(--color-red);
+  }
+  &.warning {
+    background-color: var(--color-yellow);
+  }
+  &.notice {
+    background-color: var(--color-blue);
+  }  
+}

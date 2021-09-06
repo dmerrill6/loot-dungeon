@@ -1,0 +1,81 @@
+* {
+  --background: #3a3838;
+  --color-black-1: #111;
+  --color-black-2: #222;
+  --color-black-3: #444;
+  --color-white: #f0f0f0;
+  --color-red: #fe5c40;
+  --color-blue: #74a2df;
+  --color-green: #c5e58a;
+  --color-yellow: #feec72;
+  --color-pink: #f56b97;
+  --color-purple: #bb86fc;
+  --color-gray: #a0a0a0;
+  --color-light-gray: #c0c0c0;
+  --color-super-light-gray: #e0e0e0;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background-color: var(--background);
+  color: var(--color-light-gray);
+
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  letter-spacing: 0.7px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  color: var(--color-white);
+  font-weight: bold;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Marko One', serif;
+  color: var(--color-white);
+  
+}
+
+.Toastify__toast {
+  background-color: var(--background) !important;
+  color: var(--color-white) !important;
+}
+
+.center {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.ReactModal__Content {
+  background-color: var(--background) !important;
+  color: var(--color-white) !important;
+  border: solid 1px var(--color-gray) !important;
+  border-radius: 3px !important;
+  box-shadow: 5px 5px 5px var(--color-black-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset: 100px !important;
+  max-height: 600px;
+  overflow-y: auto;
+  transition: opacity 200ms ease-in-out;
+}
+
+.ReactModal__Overlay {
+  background-color: rgba(125, 125, 125, 0.5) !important;
+}
