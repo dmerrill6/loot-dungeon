@@ -62,6 +62,9 @@ const Home: NextPage = () => {
         <div className={styles.main_link}>
           <Link href="/not-implemented">Smart contract</Link>
         </div>
+        <div className={styles.main_link}>
+          <Link href={`https://opensea.io/`}>OpenSea</Link>
+        </div>
       </div>
     </Layout>
   )

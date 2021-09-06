@@ -196,7 +196,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         address _lootAddress,
         bool _isTestNetwork
     )
-        ERC1155("https://lootdungeon.app/api/item/{id}.json")
+        ERC1155("https://lootdungeon.app/api/item/{id}")
         VRFConsumerBase(vrfCoordinator, link)
     {
         s_keyHash = keyHash;
