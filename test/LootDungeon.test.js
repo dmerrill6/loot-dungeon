@@ -567,5 +567,23 @@ contract("LootDungeon", accounts => {
       hasEntered = await dungeon.hasEnteredTheDungeon.call(newTokenId);
       assert.equal(hasEntered, true);
     });
+  });
+
+  describe('misc', () => {
+    it('the domain is correct', async () => {
+      let uri = await dungeon.uri.call(0);
+      assert.equal(uri, "https://loot-dungeon.com/api/item/0.json");
+    });
+
+    it('only owner', async () => {
+      let err
+      try {
+        await dungeon.setFerrymanPrice(0, { from: accounts[1] });
+      } catch (error) {
+        err = error;
+      }
+
+      assert.equal(err.message, "Returned error: VM Exception while processing transaction: revert Ownable: caller is not the owner -- Reason given: Ownable: caller is not the owner.");
+    })
   })
 });

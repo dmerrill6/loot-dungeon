@@ -66,8 +66,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         int256 monsterHp;
     }
 
-    uint256 public constant MONSTER_TYPES = 6;
-
     uint256 public constant RAT_ID = 1;
     uint256 public constant SKELETON_ID = 2;
     uint256 public constant MINOTAUR_ID = 3;
@@ -75,10 +73,9 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public constant DEMON_ID = 5;
     uint256 public constant DRAGON_ID = 6;
 
-    Monster public Rat =
-        Monster("Rat", RAT_ID, 10, 0, 3, 4, 3, RAT_MEAT, RAT_CARD);
-
-    Monster public Skeleton =
+    Monster Rat =
+        Monster("Sewer Rat", RAT_ID, 10, 0, 3, 4, 3, RAT_MEAT, RAT_CARD);
+    Monster Skeleton =
         Monster(
             "Skeleton Warrior",
             SKELETON_ID,
@@ -90,8 +87,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             SKELETON_BONES,
             SKELETON_CARD
         );
-
-    Monster public Minotaur =
+    Monster Minotaur =
         Monster(
             "Minotaur Archer",
             MINOTAUR_ID,
@@ -103,8 +99,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             MINOTAUR_HORNS,
             MINOTAUR_CARD
         );
-
-    Monster public Succubus =
+    Monster Succubus =
         Monster(
             "Succubus",
             SUCCUBUS_ID,
@@ -116,11 +111,9 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             SUCCUBUS_WINGS,
             SUCCUBUS_CARD
         );
-
-    Monster public Demon =
+    Monster Demon =
         Monster("Demon", DEMON_ID, 15, 4, 15, 5, 20, DEMON_HEAD, DEMON_CARD);
-
-    Monster public Dragon =
+    Monster Dragon =
         Monster(
             "Fire Dragon",
             DRAGON_ID,
@@ -132,6 +125,8 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             DRAGON_EYE,
             DRAGON_CARD
         );
+
+    Monster[6] public monsterArray;
 
     uint256 private constant DICE_PRECISION = 2**128;
     uint256 private constant ROLL_IN_PROGRESS = DICE_PRECISION + 1;
@@ -160,10 +155,10 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public battlePrice = 0.02 ether;
     uint256 public ferrymanPrice = 5 ether;
     Item public basePlayerStats = Item(10, 0, 1, 1, 1);
+    bool public lockSettings = false;
 
     address public proxyRegistryAddress;
     address public lootAddress; // 0xFF9C1b15B16263C61d017ee9F65C50e4AE0113D7;
-    address public lootComponentsAddress; //0x3eb43b1545a360d1D065CB7539339363dFD445F3
 
     mapping(uint256 => address) public lootOwners;
     mapping(uint256 => uint256) public lootTimeLock;
@@ -183,6 +178,8 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
     event StartedBattle(uint256 indexed tokenId, address indexed playerAddress);
 
+    event VrfResponseArrived(uint256 indexed tokenId);
+
     event WonBattle(uint256 indexed tokenId, address indexed playerAddress);
 
     event BribedTheFerryman(
@@ -199,7 +196,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         address _lootAddress,
         bool _isTestNetwork
     )
-        ERC1155("https://[MY_DOMAIN]/api/item/{id}.json")
+        ERC1155("https://lootdungeon.app/api/item/{id}.json")
         VRFConsumerBase(vrfCoordinator, link)
     {
         s_keyHash = keyHash;
@@ -211,6 +208,13 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         remainingMonsterCount[Succubus.id] = 350;
         remainingMonsterCount[Demon.id] = 100;
         remainingMonsterCount[Dragon.id] = 50;
+
+        monsterArray[0] = Rat;
+        monsterArray[1] = Skeleton;
+        monsterArray[2] = Minotaur;
+        monsterArray[3] = Succubus;
+        monsterArray[4] = Demon;
+        monsterArray[5] = Dragon;
 
         proxyRegistryAddress = _proxyRegistryAddress;
         lootAddress = _lootAddress;
@@ -236,15 +240,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         _mint(msg.sender, DRAGON_CARD, 1, "");
     }
 
-    function _getMonsterArr()
-        internal
-        view
-        returns (Monster[MONSTER_TYPES] memory)
-    {
-        return [Rat, Skeleton, Minotaur, Succubus, Demon, Dragon];
-    }
-
-    modifier hasEnoughLink() {
+    modifier onlyIfEnoughLink() {
         if (isTestNetwork == false) {
             require(
                 LINK.balanceOf(address(this)) >= s_fee,
@@ -259,6 +255,11 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             lootOwners[tokenId] == _msgSender(),
             "You do not have permissions to use this loot bag"
         );
+        _;
+    }
+
+    modifier onlyIfNotLocked() {
+        require(lockSettings == false, "The contract settings are locked");
         _;
     }
 
@@ -282,6 +283,10 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         _;
     }
 
+    function hasEnoughLink() public view returns (bool) {
+        return LINK.balanceOf(address(this)) >= s_fee;
+    }
+
     function getLootOwner(uint256 tokenId) public view returns (address) {
         return lootOwners[tokenId];
     }
@@ -295,11 +300,10 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         require(totalMonsters > 0, "All monsters have been slayed.");
 
         uint256 boundedResult = rollResult.sub(1).mod(totalMonsters);
-        Monster[MONSTER_TYPES] memory monsterArr = _getMonsterArr();
 
         uint256 cap = 0;
-        for (uint256 i = 0; i < monsterArr.length; i++) {
-            Monster memory currMonster = monsterArr[i];
+        for (uint256 i = 0; i < monsterArray.length; i++) {
+            Monster memory currMonster = monsterArray[i];
 
             cap += remainingMonsterCount[currMonster.id];
             if (boundedResult < cap) {
@@ -325,10 +329,9 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
     function getRemainingMonsterCount() public view returns (uint256) {
         uint256 totalMonsters = 0;
-        Monster[MONSTER_TYPES] memory monsterArr = _getMonsterArr();
 
-        for (uint256 i = 0; i < monsterArr.length; i++) {
-            totalMonsters += remainingMonsterCount[monsterArr[i].id];
+        for (uint256 i = 0; i < monsterArray.length; i++) {
+            totalMonsters += remainingMonsterCount[monsterArray[i].id];
         }
 
         return totalMonsters;
@@ -394,7 +397,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
         _monsterEncounter(
             tokenId,
-            _pseudorandom(string(abi.encodePacked(tokenId)))
+            _pseudorandom(string(abi.encodePacked(tokenId)), true)
         );
     }
 
@@ -456,7 +459,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     function battleMonster(uint256 tokenId)
         external
         payable
-        hasEnoughLink
+        onlyIfEnoughLink
         onlyLootBagOwner(tokenId)
         nonReentrant
         returns (bytes32 requestId)
@@ -573,13 +576,15 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         Monster memory currMonster = tokenIdEncounteredMonster[tokenId];
 
         uint256 playerAccuracyRoll = _pseudorandom(
-            string(abi.encodePacked(randomSeed, "player", round))
+            string(abi.encodePacked(randomSeed, "player", round)),
+            false
         ).mod(20).add(1);
 
         // Player hit
         if (playerAccuracyRoll + playerStats.dexterity > currMonster.agility) {
             uint256 playerAttackRoll = _pseudorandom(
-                string(abi.encodePacked(randomSeed, "playerAttack", round))
+                string(abi.encodePacked(randomSeed, "playerAttack", round)),
+                false
             ).mod(playerStats.attack).add(1);
 
             if (playerAttackRoll > currMonster.armor) {
@@ -599,13 +604,15 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         Monster memory currMonster = tokenIdEncounteredMonster[tokenId];
 
         uint256 monsterAccuracyRoll = _pseudorandom(
-            string(abi.encodePacked(randomSeed, "monster", round))
+            string(abi.encodePacked(randomSeed, "monster", round)),
+            false
         ).mod(20).add(1);
 
         // Monster hit
         if (monsterAccuracyRoll + currMonster.dexterity > playerStats.agility) {
             uint256 monsterAttackRoll = _pseudorandom(
-                string(abi.encodePacked(randomSeed, "monsterAttack", round))
+                string(abi.encodePacked(randomSeed, "monsterAttack", round)),
+                false
             ).mod(currMonster.attack).add(1);
 
             if (monsterAttackRoll > playerStats.armor) {
@@ -623,6 +630,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         uint256 tokenId = requestIdToTokenId[requestId];
         uint256 rollResult = randomness.mod(DICE_PRECISION).add(1); // Add 1 to distinguish from not-rolled state in edge-case (rng = 0)
         tokenIdToMonsterBattleRollResult[tokenId] = rollResult;
+        emit VrfResponseArrived(tokenId);
     }
 
     function claimDrops(uint256 tokenId)
@@ -669,7 +677,8 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         uint256 randomSeed = tokenIdToMonsterBattleRollResult[tokenId];
 
         uint256 luckyDropRoll = _pseudorandom(
-            string(abi.encodePacked(randomSeed, "luckyDrop"))
+            string(abi.encodePacked(randomSeed, "luckyDrop")),
+            false
         ).mod(LUCKY_DROP_CHANCE_1_IN).add(1);
 
         _mint(_msgSender(), currMonster.guaranteedDrop, 1, "");
@@ -706,10 +715,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     }
 
     function claimEscapeCard() external {
-        require(
-            escapeNftClaimedState[_msgSender()] == ESCAPE_NFT_READY_TO_CLAIM,
-            "Escape NFT not ready to be claimed"
-        );
+        require(canClaimEscapeCard(), "Escape NFT not ready to be claimed");
         escapeNftClaimedState[_msgSender()] = ESCAPE_NFT_CLAIMED;
 
         _mint(_msgSender(), ESCAPE_CARD, 1, "");
@@ -717,8 +723,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
     function claimFerrymanCard() external {
         require(
-            ferrymanCardClaimedState[_msgSender()] ==
-                FERRYMAN_NFT_READY_TO_CLAIM,
+            canClaimFerrymanCard(),
             "Ferryman Card not ready to be claimed"
         );
         ferrymanCardClaimedState[_msgSender()] = FERRYMAN_NFT_CLAIMED;
@@ -726,15 +731,25 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         _mint(_msgSender(), FERRYMAN_CARD, 1, "");
     }
 
-    function _pseudorandom(string memory input)
+    function canClaimEscapeCard() public view returns (bool) {
+        return escapeNftClaimedState[_msgSender()] == ESCAPE_NFT_READY_TO_CLAIM;
+    }
+
+    function canClaimFerrymanCard() public view returns (bool) {
+        return
+            ferrymanCardClaimedState[_msgSender()] ==
+            FERRYMAN_NFT_READY_TO_CLAIM;
+    }
+
+    function _pseudorandom(string memory input, bool varyEachBlock)
         internal
         view
         returns (uint256)
     {
-        uint256 blockComponent = block.number;
-        if (isTestNetwork) {
+        bytes32 blockComponent = 0;
+        if (!isTestNetwork && varyEachBlock) {
             // Remove randomness in tests
-            blockComponent = 0;
+            blockComponent = blockhash(block.number);
         }
         return uint256(keccak256(abi.encodePacked(input, blockComponent)));
     }
@@ -856,23 +871,38 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         );
 
         IERC721 lootContract = IERC721(lootAddress);
+        address prevOwner = lootOwners[tokenId];
         lootOwners[tokenId] = address(0x0);
         tokenIdToEnterDungeonRollResult[tokenId] = uint256(0x0);
         tokenIdToMonsterBattleRollResult[tokenId] = uint256(0x0);
         lootTimeLock[tokenId] = uint256(0x0);
         lootContract.transferFrom(address(this), owner(), tokenId);
+
+        _burn(prevOwner, lootIdToWrappedLootId(tokenId), 1);
     }
 
-    // Set params
-    function setEscapePrice(uint256 newPrice) external onlyOwner {
+    // Adjust params
+    function setEscapePrice(uint256 newPrice)
+        external
+        onlyOwner
+        onlyIfNotLocked
+    {
         escapePrice = newPrice;
     }
 
-    function setBattlePrice(uint256 newPrice) external onlyOwner {
+    function setBattlePrice(uint256 newPrice)
+        external
+        onlyOwner
+        onlyIfNotLocked
+    {
         battlePrice = newPrice;
     }
 
-    function setFerrymanPrice(uint256 newPrice) external onlyOwner {
+    function setFerrymanPrice(uint256 newPrice)
+        external
+        onlyOwner
+        onlyIfNotLocked
+    {
         ferrymanPrice = newPrice;
     }
 
@@ -880,12 +910,31 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         s_fee = newFee;
     }
 
-    function adjustPlayerStats(Item memory newStats) external onlyOwner {
+    function adjustPlayerStats(Item memory newStats)
+        external
+        onlyOwner
+        onlyIfNotLocked
+    {
         basePlayerStats = newStats;
     }
 
-    // Lib
+    function adjustMonster(Monster memory adjustedMonster, uint256 monsterIndex)
+        external
+        onlyOwner
+        onlyIfNotLocked
+    {
+        monsterArray[monsterIndex] = adjustedMonster;
+    }
 
+    function setUri(string memory newUri) external onlyOwner {
+        _setURI(newUri);
+    }
+
+    function lockFromAdditionalChanges() external onlyOwner onlyIfNotLocked {
+        lockSettings = true;
+    }
+
+    // Lib
     function toString(uint256 value) internal pure returns (string memory) {
         // Inspired by OraclizeAPI's implementation - MIT license
         // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
