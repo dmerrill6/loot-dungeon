@@ -188,4 +188,17 @@ export default [
       </p>
     ),
   },
+  {
+    q: 'Can variables in the smart contract be changed?',
+    a: (
+      <p>
+        The owner of the contract can adjust the following variables: Monster
+        stats, player base stats, fees, and maximum rounds per battle. However,
+        these amounts will only be changed if there's a balancing mistake and as
+        soon as the authors are confident on the values, they will call the
+        `lockFromAdditionalChanges` function which locks the contract from any
+        additional adjustment.
+      </p>
+    ),
+  },
 ]

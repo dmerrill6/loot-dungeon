@@ -12,7 +12,7 @@ const monsters: { [key: string]: Monster } = {
     name: 'Sewer Rat',
     description:
       'Most common monster found in the dungeon. Every warrior should be able to defeat them easily.',
-    stats: [10, 0, 3, 4, 3],
+    stats: [10, 0, 5, 4, 3],
     initialCount: 2000,
   },
   skeleton: {
@@ -20,7 +20,7 @@ const monsters: { [key: string]: Monster } = {
     name: 'Skeleton Warrior',
     description:
       'Dead soldiers that continued fighting after they died. They are not as strong as they were though...',
-    stats: [12, 1, 6, 4, 2],
+    stats: [12, 1, 7, 4, 2],
     initialCount: 1000,
   },
   minotaur: {
@@ -36,7 +36,7 @@ const monsters: { [key: string]: Monster } = {
     name: 'Succubus',
     description:
       "Charming creatures. Somehow they manage to convince their opponents to miss on purpose. Their attacks can hit really hard, and if attacked they don't survive too many hits.",
-    stats: [10, 2, 20, 10, 5],
+    stats: [10, 2, 20, 12, 5],
     initialCount: 350,
   },
   demon: {

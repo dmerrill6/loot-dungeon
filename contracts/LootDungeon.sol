@@ -74,14 +74,14 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public constant DRAGON_ID = 6;
 
     Monster Rat =
-        Monster("Sewer Rat", RAT_ID, 10, 0, 3, 4, 3, RAT_MEAT, RAT_CARD);
+        Monster("Sewer Rat", RAT_ID, 10, 0, 5, 4, 3, RAT_MEAT, RAT_CARD);
     Monster Skeleton =
         Monster(
             "Skeleton Warrior",
             SKELETON_ID,
             12,
             1,
-            6,
+            7,
             4,
             2,
             SKELETON_BONES,
@@ -106,7 +106,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             10,
             2,
             20,
-            10,
+            12,
             5,
             SUCCUBUS_WINGS,
             SUCCUBUS_CARD
@@ -151,7 +151,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
     uint256 public escapePrice = 0.04 ether;
     uint256 public battlePrice = 0.02 ether;
-    uint256 public ferrymanPrice = 5 ether;
+    uint256 public ferrymanPrice = 2 ether;
     Item public basePlayerStats = Item(10, 0, 1, 1, 1);
     bool public lockSettings = false;
     uint256 public maxRoundsPerBattle = 7;

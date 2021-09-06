@@ -806,19 +806,6 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [],
-    name: 'MAX_ROUNDS_PER_BATTLE',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'MINOTAUR_CARD',
     outputs: [
       {
@@ -984,6 +971,19 @@ export const ERC1155_LootDungeon = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'maxRounds',
+        type: 'uint256',
+      },
+    ],
+    name: 'adjustMaxRounds',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -1215,6 +1215,32 @@ export const ERC1155_LootDungeon = [
     name: 'bribeFerryman',
     outputs: [],
     stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'canClaimEscapeCard',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'canClaimFerrymanCard',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -1680,6 +1706,13 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [],
+    name: 'lockFromAdditionalChanges',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'lockSettings',
     outputs: [
       {
@@ -1702,38 +1735,6 @@ export const ERC1155_LootDungeon = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'lootComponentsAddress',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'lootIdToWrappedLootId',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'pure',
     type: 'function',
   },
   {
@@ -1764,6 +1765,19 @@ export const ERC1155_LootDungeon = [
       },
     ],
     name: 'lootTimeLock',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'maxRoundsPerBattle',
     outputs: [
       {
         internalType: 'uint256',
@@ -2055,6 +2069,19 @@ export const ERC1155_LootDungeon = [
   {
     inputs: [
       {
+        internalType: 'string',
+        name: 'newUri',
+        type: 'string',
+      },
+    ],
+    name: 'setUri',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'bytes4',
         name: 'interfaceId',
         type: 'bytes4',
@@ -2066,6 +2093,44 @@ export const ERC1155_LootDungeon = [
         internalType: 'bool',
         name: '',
         type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenIdToEnterDungeonRollResult',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenIdToMonsterBattleRollResult',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -2139,25 +2204,6 @@ export const ERC1155_LootDungeon = [
     name: 'withdrawToken',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'wrappedTokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'wrappedLootIdToLootId',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'pure',
     type: 'function',
   },
 ]
