@@ -131,8 +131,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 private constant DICE_PRECISION = 2**128;
     uint256 private constant ROLL_IN_PROGRESS = DICE_PRECISION + 1;
 
-    uint256 public constant MAX_ROUNDS_PER_BATTLE = 6;
-
     uint256 public constant LOOT_TIME_LOCK = 1 days;
 
     uint256 public constant LUCKY_DROP_CHANCE_1_IN = 10;
@@ -156,18 +154,19 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public ferrymanPrice = 5 ether;
     Item public basePlayerStats = Item(10, 0, 1, 1, 1);
     bool public lockSettings = false;
+    uint256 public maxRoundsPerBattle = 7;
 
     address public proxyRegistryAddress;
     address public lootAddress; // 0xFF9C1b15B16263C61d017ee9F65C50e4AE0113D7;
 
     mapping(uint256 => address) public lootOwners;
     mapping(uint256 => uint256) public lootTimeLock;
-    mapping(uint256 => uint256) private tokenIdToEnterDungeonRollResult;
+    mapping(uint256 => uint256) public tokenIdToEnterDungeonRollResult;
     mapping(uint256 => Monster) private tokenIdEncounteredMonster;
     mapping(address => uint8) private escapeNftClaimedState;
     mapping(address => uint8) private ferrymanCardClaimedState;
 
-    mapping(uint256 => uint256) private tokenIdToMonsterBattleRollResult;
+    mapping(uint256 => uint256) public tokenIdToMonsterBattleRollResult;
     mapping(bytes32 => uint256) private requestIdToTokenId;
 
     event EnteredDungeon(
@@ -351,22 +350,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         return tokenIdToMonsterBattleRollResult[tokenId] != uint256(0x0);
     }
 
-    function lootIdToWrappedLootId(uint256 tokenId)
-        public
-        pure
-        returns (uint256)
-    {
-        return WRAPPED_TOKEN_OFFSET + tokenId;
-    }
-
-    function wrappedLootIdToLootId(uint256 wrappedTokenId)
-        public
-        pure
-        returns (uint256)
-    {
-        return wrappedTokenId.sub(WRAPPED_TOKEN_OFFSET);
-    }
-
     /**
      * Requires the owner of the loot bag to approve the transfer first.
      */
@@ -382,7 +365,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         if (lootContract.ownerOf(tokenId) != address(this)) {
             lootContract.transferFrom(_msgSender(), address(this), tokenId);
             lootOwners[tokenId] = _msgSender();
-            _mint(_msgSender(), lootIdToWrappedLootId(tokenId), 1, ""); // We use this to track loots in dungeon per user
             lootTimeLock[tokenId] = block.timestamp + LOOT_TIME_LOCK;
         }
 
@@ -453,7 +435,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
         IERC721 lootContract = IERC721(lootAddress);
         lootContract.transferFrom(address(this), ogOwner, tokenId);
-        _burn(_msgSender(), lootIdToWrappedLootId(tokenId), 1);
     }
 
     function battleMonster(uint256 tokenId)
@@ -528,7 +509,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         onlyIfBattleFinished(tokenId)
         returns (BattleRoundResult memory)
     {
-        if (round > MAX_ROUNDS_PER_BATTLE) {
+        if (round > maxRoundsPerBattle - 1) {
             // Player wins by forfeit
             return
                 BattleRoundResult(
@@ -581,15 +562,17 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         ).mod(20).add(1);
 
         // Player hit
-        if (playerAccuracyRoll + playerStats.dexterity > currMonster.agility) {
-            uint256 playerAttackRoll = _pseudorandom(
-                string(abi.encodePacked(randomSeed, "playerAttack", round)),
-                false
-            ).mod(playerStats.attack).add(1);
+        if (playerAccuracyRoll + playerStats.dexterity < currMonster.agility) {
+            return 0;
+        }
 
-            if (playerAttackRoll > currMonster.armor) {
-                return playerAttackRoll.sub(currMonster.armor);
-            }
+        uint256 playerAttackRoll = _pseudorandom(
+            string(abi.encodePacked(randomSeed, "playerAttack", round)),
+            false
+        ).mod(playerStats.attack).add(1);
+
+        if (playerAttackRoll > currMonster.armor) {
+            return playerAttackRoll.sub(currMonster.armor);
         }
 
         return 0;
@@ -608,16 +591,18 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             false
         ).mod(20).add(1);
 
-        // Monster hit
-        if (monsterAccuracyRoll + currMonster.dexterity > playerStats.agility) {
-            uint256 monsterAttackRoll = _pseudorandom(
-                string(abi.encodePacked(randomSeed, "monsterAttack", round)),
-                false
-            ).mod(currMonster.attack).add(1);
+        // Monster miss
+        if (monsterAccuracyRoll + currMonster.dexterity < playerStats.agility) {
+            return 0;
+        }
 
-            if (monsterAttackRoll > playerStats.armor) {
-                return monsterAttackRoll.sub(playerStats.armor);
-            }
+        uint256 monsterAttackRoll = _pseudorandom(
+            string(abi.encodePacked(randomSeed, "monsterAttack", round)),
+            false
+        ).mod(currMonster.attack).add(1);
+
+        if (monsterAttackRoll > playerStats.armor) {
+            return monsterAttackRoll.sub(playerStats.armor);
         }
 
         return 0;
@@ -871,14 +856,11 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         );
 
         IERC721 lootContract = IERC721(lootAddress);
-        address prevOwner = lootOwners[tokenId];
         lootOwners[tokenId] = address(0x0);
         tokenIdToEnterDungeonRollResult[tokenId] = uint256(0x0);
         tokenIdToMonsterBattleRollResult[tokenId] = uint256(0x0);
         lootTimeLock[tokenId] = uint256(0x0);
         lootContract.transferFrom(address(this), owner(), tokenId);
-
-        _burn(prevOwner, lootIdToWrappedLootId(tokenId), 1);
     }
 
     // Adjust params
@@ -924,6 +906,14 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         onlyIfNotLocked
     {
         monsterArray[monsterIndex] = adjustedMonster;
+    }
+
+    function adjustMaxRounds(uint256 maxRounds)
+        external
+        onlyOwner
+        onlyIfNotLocked
+    {
+        maxRoundsPerBattle = maxRounds;
     }
 
     function setUri(string memory newUri) external onlyOwner {

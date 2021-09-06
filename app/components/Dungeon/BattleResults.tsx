@@ -9,6 +9,9 @@ import styles from '@styles/components/Dungeon.module.scss'
 import { FERRYMAN_PRICE } from '@constants/fees'
 import { useRouter } from 'next/router'
 
+const battleTimeout = (battleResults: BattleRoundResult) =>
+  battleResults.won && battleResults.monsterHp > 0 && battleResults.playerHp > 0
+
 export default function BattleResults({
   tokenId,
 }: {
@@ -57,30 +60,31 @@ export default function BattleResults({
       {Object.keys(roundResults).map((resultKey: string) => (
         <div key={resultKey} className={styles.section}>
           <h4>Round {parseInt(resultKey, 10) + 1}:</h4>
-          <p>
-            The {monster.name} attacks
-            {roundResults[resultKey].lastPlayerReceivedDamage === 0
-              ? ' but misses!'
-              : `. You lose ${roundResults[resultKey].lastPlayerReceivedDamage} HP.`}
-          </p>
-          <p>
-            You attack
-            {roundResults[resultKey].lastMonsterReceivedDamage === 0
-              ? ' but miss!'
-              : `. The ${monster.name} loses ${roundResults[resultKey].lastMonsterReceivedDamage} HP.`}
-          </p>
-          <h5>Remaining HP</h5>
-          <p>
-            <b>You</b>: {roundResults[resultKey].playerHp} HP
-          </p>
-          <p>
-            <b>{monster.name}</b>: {roundResults[resultKey].monsterHp} HP
-          </p>
-          {roundResults[resultKey].won &&
-          roundResults[resultKey].monsterHp > 0 &&
-          roundResults[resultKey].playerHp > 0
-            ? `The battle has dragged for too long and the ${monster.name} faints in fatigue.`
-            : ''}
+          {battleTimeout(roundResults[resultKey]) ? (
+            `The battle has dragged for too long and the ${monster.name} faints in fatigue.`
+          ) : (
+            <>
+              <p>
+                The {monster.name} attacks
+                {roundResults[resultKey].lastPlayerReceivedDamage === 0
+                  ? ' but misses!'
+                  : `. You lose ${roundResults[resultKey].lastPlayerReceivedDamage} HP.`}
+              </p>
+              <p>
+                You attack
+                {roundResults[resultKey].lastMonsterReceivedDamage === 0
+                  ? ' but miss!'
+                  : `. The ${monster.name} loses ${roundResults[resultKey].lastMonsterReceivedDamage} HP.`}
+              </p>
+              <h5>Remaining HP</h5>
+              <p>
+                <b>You</b>: {roundResults[resultKey].playerHp} HP
+              </p>
+              <p>
+                <b>{monster.name}</b>: {roundResults[resultKey].monsterHp} HP
+              </p>
+            </>
+          )}
         </div>
       ))}
       {!currRoundResults || currRoundResults.hasNextRound ? (

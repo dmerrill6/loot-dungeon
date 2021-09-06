@@ -57,7 +57,7 @@ const Home: NextPage = () => {
           <Link href="/monsters">Monsters</Link>
         </div>
         <div className={styles.main_link}>
-          <Link href="/stats">Loot stats</Link>
+          <Link href="/stats">My stats</Link>
         </div>
         <div className={styles.main_link}>
           <Link href="/not-implemented">Smart contract</Link>

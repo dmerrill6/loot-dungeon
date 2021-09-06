@@ -11,11 +11,13 @@ export default function LootSelector({
   render,
   title,
   path,
+  forceOwner = true,
 }: {
   title?: string
   tokenId?: string
   path?: string
   render: ({ tokenId }: { tokenId: string }) => ReactElement
+  forceOwner?: boolean
 }): ReactElement {
   const { address } = wallet.useContainer()
   const dungeonContainer = dungeon.useContainer()
@@ -31,7 +33,8 @@ export default function LootSelector({
   useEffect(() => {
     // useRef value stored in .current property
     timer.current = setInterval(
-      () => (tokenId ? refreshDungeonState(tokenId) : null),
+      () =>
+        tokenId && ownsLoot[tokenId] ? refreshDungeonState(tokenId) : null,
       15000
     )
 
@@ -51,7 +54,7 @@ export default function LootSelector({
     return <LoadGame title={title} path={path} />
   }
 
-  if (ownsLoot[tokenId] === false) {
+  if (ownsLoot[tokenId] === false && forceOwner) {
     return (
       <>
         <Error>

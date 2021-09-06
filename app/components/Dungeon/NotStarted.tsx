@@ -24,6 +24,7 @@ const NotStartedModal = ({
   refreshDungeonState: Function
 }): ReactElement => {
   const [loading, setLoading] = useState<boolean>(false)
+  const [agreed, setAgreed] = useState<boolean>(false)
 
   if (!isApproved) {
     return (
@@ -70,10 +71,24 @@ const NotStartedModal = ({
         Warning: You will have 24 hours to either battle or escape. Otherwise
         your Loot might be liquidated.
       </Error>
+      <div>
+        <label>
+          <input
+            name="agreed"
+            type="checkbox"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+          />
+          I've read the FAQ and disclaimer and understand the risks involved.
+        </label>
+      </div>
+      <br />
+
       <Button
         size="big"
         loading={loading}
         style="primary"
+        disabled={!agreed}
         onClick={async () => {
           setLoading(true)
           try {

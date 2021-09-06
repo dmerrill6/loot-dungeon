@@ -33,6 +33,7 @@ export default function Dungeon({
       <LootSelector
         title="Loot Stats"
         path="stats"
+        forceOwner={false}
         tokenId={tokenId}
         render={({ tokenId }: { tokenId: string }) => {
           if (!stats) {
