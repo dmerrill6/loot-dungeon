@@ -4,6 +4,6 @@ export default function handler(req, res) {
   res.status(200).json({
     name: 'Rat card',
     description: 'Rare drop given to someone who defeated a Sewer Rat.',
-    image: 'https://lootdungeon.app/items/4',
+    image: 'https://lootdungeon.app/items/4.png',
   })
 }

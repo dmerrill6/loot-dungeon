@@ -5,6 +5,6 @@ export default function handler(req, res) {
     name: 'Escape Card',
     description:
       '"He who fights and runs away, lives to fight another day.". Hey, there is no shame in surviving for another battle! This card was given away to a warrior who escaped from a battle.',
-    image: 'https://lootdungeon.app/items/1',
+    image: 'https://lootdungeon.app/items/1.png',
   })
 }

@@ -5,6 +5,6 @@ export default function handler(req, res) {
     name: 'Ferryman Card',
     description:
       'Bribing the ferryman is an expensive task! At least you have this NFT to show for it. This card was given to someone who died in battle and was brought back to life.',
-    image: 'https://lootdungeon.app/items/2',
+    image: 'https://lootdungeon.app/items/2.png',
   })
 }

@@ -4,6 +4,6 @@ export default function handler(req, res) {
   res.status(200).json({
     name: 'Succubus card',
     description: 'Rare drop given to someone who defeated a Succubus.',
-    image: 'https://lootdungeon.app/items/10',
+    image: 'https://lootdungeon.app/items/10.png',
   })
 }

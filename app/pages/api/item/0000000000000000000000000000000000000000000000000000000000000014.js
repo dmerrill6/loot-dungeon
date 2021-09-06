@@ -5,6 +5,6 @@ export default function handler(req, res) {
     name: 'Dragon card',
     description:
       'Extremely rare drop given to someone who defeated a Fire Dragon.',
-    image: 'https://lootdungeon.app/items/14',
+    image: 'https://lootdungeon.app/items/14.png',
   })
 }
