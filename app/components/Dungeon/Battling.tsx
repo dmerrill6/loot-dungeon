@@ -8,8 +8,12 @@ export default function Battling({
 }): ReactElement {
   return (
     <div className="center">
-      <Loading type="spin" />
-      <p>Waiting for random number generation (Chainlink)...</p>
+      <Loading type="spin" className="inline" />
+
+      <p>
+        Waiting for random number generation from Chainlink... This might take a
+        couple of minutes.
+      </p>
     </div>
   )
 }

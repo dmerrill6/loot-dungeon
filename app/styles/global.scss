@@ -51,7 +51,7 @@ h6 {
 }
 
 .Toastify__toast {
-  background-color: var(--background) !important;
+  background-color: var(--color-black-3) !important;
   color: var(--color-white) !important;
 }
 
@@ -74,8 +74,13 @@ h6 {
   max-height: 600px;
   overflow-y: auto;
   transition: opacity 200ms ease-in-out;
+  padding: 50px !important;
 }
 
 .ReactModal__Overlay {
   background-color: rgba(125, 125, 125, 0.5) !important;
+}
+
+.inline {
+  display: inline-block;
 }

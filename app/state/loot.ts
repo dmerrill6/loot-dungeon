@@ -9,7 +9,7 @@ import { ERC721, ERC1155_LootDungeon } from '@constants/abi' // ABIs
 // Types
 import type { BigNumber } from '@ethersproject/bignumber' // BigNumber
 import { useState } from 'react'
-import { BATTLE_PRICE, ESCAPE_PRICE } from '@constants/fees'
+import { BATTLE_PRICE, ESCAPE_PRICE, FERRYMAN_PRICE } from '@constants/fees'
 import { MAX_ROUNDS_PER_BATTLE } from '@constants/misc'
 
 export interface BattleRoundResult {
@@ -150,8 +150,11 @@ function useLoot() {
     const returnedPlayerStats = await dungeon.getStats(tokenId)
 
     const playerStats = {
-      ...returnedPlayerStats,
       hp: returnedPlayerStats.hp.toNumber(),
+      armor: returnedPlayerStats.armor.toNumber(),
+      attack: returnedPlayerStats.attack.toNumber(),
+      agility: returnedPlayerStats.agility.toNumber(),
+      dexterity: returnedPlayerStats.dexterity.toNumber(),
     }
 
     return playerStats
@@ -172,8 +175,6 @@ function useLoot() {
     let lastPlayerReceivedDamage = 0
     let lastMonsterReceivedDamage = 0
 
-    console.log(playerStats, monster, round)
-
     while (hasNextRound && round <= untilRound) {
       const roundRes = await checkBattleResults(
         tokenId,
@@ -182,7 +183,6 @@ function useLoot() {
         monsterHp,
         playerStats
       )
-      console.log(`Round ${round}: ${JSON.stringify(roundRes)}`)
 
       lastPlayerReceivedDamage = playerHp - roundRes.playerHp
       lastMonsterReceivedDamage = monsterHp - roundRes.monsterHp
@@ -202,8 +202,6 @@ function useLoot() {
       lastPlayerReceivedDamage,
       lastMonsterReceivedDamage,
     }
-
-    console.log('round', round, result)
 
     return result
   }
@@ -267,7 +265,7 @@ function useLoot() {
       toast.success('Loot Dungeon was approved to manage your Loot')
     } catch (e) {
       console.log(e)
-      toast.error('Error when approving Loot Dungeon as a Loot operator')
+      toast.error('Error while approving Loot Dungeon as a Loot operator')
     }
   }
 
@@ -280,7 +278,7 @@ function useLoot() {
       toast.success('You have entered the dungeon')
     } catch (e) {
       console.log(e)
-      toast.error('Error when entering the dungeon')
+      toast.error('Error while entering the dungeon')
     }
   }
 
@@ -295,7 +293,7 @@ function useLoot() {
       toast.success('Your battle has started')
     } catch (e) {
       console.log(e)
-      toast.error('Error when attempting to battle')
+      toast.error('Error while attempting to battle')
     }
   }
 
@@ -310,7 +308,39 @@ function useLoot() {
       toast.success('You escaped from the dungeon successfully')
     } catch (e) {
       console.log(e)
-      toast.error('Error when attempting to flee')
+      toast.error('Error while attempting to flee')
+    }
+  }
+
+  async function claimDrops(tokenId: string): Promise<void> {
+    const { dungeon }: { dungeon: Contract } = collectContracts()
+
+    try {
+      const tx = await dungeon['claimDrops(uint256)'](tokenId)
+      await tx.wait(1)
+      toast.success(
+        'You claimed the drops successfully. Check them out at OpenSea!'
+      )
+    } catch (e) {
+      console.log(e)
+      toast.error('Error while claiming rewards')
+    }
+  }
+
+  async function bribeFerryman(tokenId: string): Promise<void> {
+    const { dungeon }: { dungeon: Contract } = collectContracts()
+
+    try {
+      const tx = await dungeon['bribeFerryman(uint256)'](tokenId, {
+        value: ethers.utils.parseEther(FERRYMAN_PRICE),
+      })
+      await tx.wait(1)
+      toast.success(
+        'You bribed the ferryman. You came back to life and the Loot bag is back at your account.'
+      )
+    } catch (e) {
+      console.log(e)
+      toast.error('Error while bribing the ferryman')
     }
   }
 
@@ -339,6 +369,8 @@ function useLoot() {
     escapeFromDungeon,
     hasEnoughLink,
     getBattleResultsUpUntilRound,
+    claimDrops,
+    bribeFerryman,
   }
 }
 

@@ -101,7 +101,7 @@ function useWallet() {
       toast.success('Connected to wallet.')
     } else {
       // Else, show failure
-      toast.error('Error when connecting wallet.')
+      toast.error('Error while connecting wallet.')
     }
   }, [onboard])
 

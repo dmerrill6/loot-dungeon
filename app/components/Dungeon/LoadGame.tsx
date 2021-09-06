@@ -6,7 +6,10 @@ import classnames from 'classnames'
 import { useRouter } from 'next/router'
 import { ChangeEvent, ReactElement, useState } from 'react'
 
-export default function LoadGame(): ReactElement {
+export default function LoadGame({
+  title = 'Welcome to the dungeon',
+  path = 'dungeon',
+}): ReactElement {
   const { address }: { address: string | null; unlock: Function } =
     wallet.useContainer()
 
@@ -19,7 +22,7 @@ export default function LoadGame(): ReactElement {
 
   return (
     <div className={classnames(styles.load_game, styles.container)}>
-      <h2>Welcome to the dungeon</h2>
+      <h2>{title}</h2>
       <p>
         We are working on autoloading your games. In the meantime please enter
         the dungeon manually.
@@ -28,7 +31,7 @@ export default function LoadGame(): ReactElement {
         onSubmit={(e) => {
           e.preventDefault()
           if (tokenId) {
-            router.push(`/dungeon/${tokenId}`)
+            router.push(`/${path}/${tokenId}`)
           }
         }}
         className={styles.buttons}

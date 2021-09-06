@@ -11,7 +11,7 @@ import Entered from './Entered'
 import Battling from './Battling'
 import WonBattle from './WonBattle'
 import LostBattle from './LostBattle'
-import Error from '@components/Error'
+import LootSelector from '@components/LootSelector'
 
 const mapping = {
   notConnected: () => <ReactLoading type="spin" color="white" />,
@@ -27,57 +27,19 @@ export default function Dungeon({
 }: {
   tokenId?: string
 }): ReactElement {
-  const { address } = wallet.useContainer()
   const dungeonContainer = dungeon.useContainer()
 
-  const { dungeonState, refreshDungeonState, ownsLoot } = dungeonContainer
-
-  useEffect(() => {
-    refreshDungeonState(tokenId || '')
-  }, [address])
-
-  const timer = useRef<NodeJS.Timer | null>(null)
-
-  useEffect(() => {
-    // useRef value stored in .current property
-    timer.current = setInterval(
-      () => (tokenId ? refreshDungeonState(tokenId) : null),
-      15000
-    )
-
-    // clear on component unmount
-    return () => {
-      if (timer.current) {
-        clearInterval(timer.current)
-      }
-    }
-  }, [])
-
-  if (!address) {
-    return <p className="center">Please connect your wallet to continue</p>
-  }
-
-  if (!tokenId) {
-    return <LoadGame />
-  }
-
-  const ComponentToRender = mapping[dungeonState]
-
-  if (ownsLoot[tokenId] === false) {
-    return (
-      <>
-        <Error>
-          You don't own Loot #{tokenId}. Are you sure you are connected to the
-          correct wallet?
-        </Error>
-        <Link href="/dungeon">Go back</Link>
-      </>
-    )
-  }
+  const { dungeonState } = dungeonContainer
 
   return (
     <div className={styles.container}>
-      <ComponentToRender tokenId={tokenId} />
+      <LootSelector
+        tokenId={tokenId}
+        render={({ tokenId }: { tokenId: string }) => {
+          const SelectedComponent = mapping[dungeonState]
+          return <SelectedComponent tokenId={tokenId} />
+        }}
+      />
     </div>
   )
 }
