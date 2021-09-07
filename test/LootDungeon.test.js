@@ -645,7 +645,7 @@ contract("LootDungeon", (accounts) => {
     it("only owner", async () => {
       let err;
       try {
-        await dungeon.setFerrymanPrice(0, { from: accounts[1] });
+        await dungeon.setFerrymanPrice(0, 0, { from: accounts[1] });
       } catch (error) {
         err = error;
       }

@@ -131,8 +131,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
     uint256 public constant LOOT_TIME_LOCK = 1 days;
 
-    uint256 public constant FERRYMAN_PRICE_INCREASE_PER_ATTEMPT = 0.005 ether;
-
     uint256 public constant LUCKY_DROP_CHANCE_1_IN = 10;
 
     uint8 public constant ESCAPE_NFT_UNCLAIMABLE = 0;
@@ -152,6 +150,8 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public escapePrice = 0.04 ether;
     uint256 public battlePrice = 0.02 ether;
     uint256 public ferrymanCurrentPrice = 0.05 ether;
+    uint256 public ferrymanPriceIncreasePerAttempt = 0.005 ether;
+
     Item public basePlayerStats = Item(10, 0, 2, 1, 1);
     bool public lockSettings = false;
     uint256 public maxRoundsPerBattle = 7;
@@ -368,7 +368,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             lootOwners[tokenId] = _msgSender();
             lootTimeLock[tokenId] = block.timestamp + LOOT_TIME_LOCK;
             agreedFerrymanPrice[tokenId] = ferrymanCurrentPrice;
-            ferrymanCurrentPrice += FERRYMAN_PRICE_INCREASE_PER_ATTEMPT;
+            ferrymanCurrentPrice += ferrymanPriceIncreasePerAttempt;
         }
 
         require(
@@ -884,12 +884,13 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         battlePrice = newPrice;
     }
 
-    function setFerrymanPrice(uint256 newPrice)
+    function setFerrymanPrice(uint256 newPrice, uint256 newIncrease)
         external
         onlyOwner
         onlyIfNotLocked
     {
         ferrymanCurrentPrice = newPrice;
+        ferrymanPriceIncreasePerAttempt = newIncrease;
     }
 
     function setLinkFee(uint256 newFee) external onlyOwner {
