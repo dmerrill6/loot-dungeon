@@ -60,10 +60,22 @@ const Home: NextPage = () => {
           <Link href="/stats">My stats</Link>
         </div>
         <div className={styles.main_link}>
-          <Link href="/not-implemented">Smart contract</Link>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://etherscan.io/address/0xdc9d70e37662ce16615224efaa9bb2315b80e36b"
+          >
+            Smart contract
+          </a>
         </div>
         <div className={styles.main_link}>
-          <Link href={`https://opensea.io/`}>OpenSea</Link>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`https://opensea.io/collection/loot-dungeon`}
+          >
+            OpenSea
+          </a>
         </div>
         <div className={styles.main_link}>
           <Link href={`/ferryman`}>Ferryman's fee</Link>
