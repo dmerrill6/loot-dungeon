@@ -13,9 +13,9 @@ export default [
           </a>{' '}
           holders. It allows you to stake your Loot and enter a dungeon. You
           will encounter a monster and can choose to fight or flee. By defeating
-          monsters you can claim their drops, which are ERC1155 NFTs. Death is
-          highly penalized, making strong monster loot scarce. High-risk,
-          high-reward.
+          monsters you can claim their drops, which are ERC1155 NFTs. Death
+          penalization increases each time someone enters the dungeon, which
+          makes drops harder to get as the game progresses.
         </p>
         <p>
           All the action is executed in a smart contract on the Ethereum
@@ -188,6 +188,17 @@ export default [
         {ESCAPE_PRICE} ETH. The death penalty is losing your Loot or paying the
         Ferryman's fee, which starts at 0.05 ETH and increases by 0.005 ETH
         everytime someone enters the dungeon.
+      </p>
+    ),
+  },
+  {
+    q: 'What happens if the death penalty increases too much after I already entered the dungeon?',
+    a: (
+      <p>
+        Nothing happens to you, since death penalties for each player are
+        calculated when entering the dungeon. That means if you see the penalty
+        is at 0.05ETH when entering, that's the amount you will get charged if
+        you die.
       </p>
     ),
   },
