@@ -37,8 +37,6 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     uint256 public constant DRAGON_EYE = 13;
     uint256 public constant DRAGON_CARD = 14;
 
-    uint256 public constant WRAPPED_TOKEN_OFFSET = 10000000;
-
     struct Monster {
         string name;
         uint256 id;
@@ -133,6 +131,8 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
     uint256 public constant LOOT_TIME_LOCK = 1 days;
 
+    uint256 public constant FERRYMAN_PRICE_INCREASE_PER_ATTEMPT = 0.005 ether;
+
     uint256 public constant LUCKY_DROP_CHANCE_1_IN = 10;
 
     uint8 public constant ESCAPE_NFT_UNCLAIMABLE = 0;
@@ -151,7 +151,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
 
     uint256 public escapePrice = 0.04 ether;
     uint256 public battlePrice = 0.02 ether;
-    uint256 public ferrymanPrice = 2 ether;
+    uint256 public ferrymanCurrentPrice = 0.05 ether;
     Item public basePlayerStats = Item(10, 0, 2, 1, 1);
     bool public lockSettings = false;
     uint256 public maxRoundsPerBattle = 7;
@@ -165,6 +165,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
     mapping(uint256 => Monster) private tokenIdEncounteredMonster;
     mapping(address => uint8) private escapeNftClaimedState;
     mapping(address => uint8) private ferrymanCardClaimedState;
+    mapping(uint256 => uint256) public agreedFerrymanPrice;
 
     mapping(uint256 => uint256) public tokenIdToMonsterBattleRollResult;
     mapping(bytes32 => uint256) private requestIdToTokenId;
@@ -366,6 +367,8 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
             lootContract.transferFrom(_msgSender(), address(this), tokenId);
             lootOwners[tokenId] = _msgSender();
             lootTimeLock[tokenId] = block.timestamp + LOOT_TIME_LOCK;
+            agreedFerrymanPrice[tokenId] = ferrymanCurrentPrice;
+            ferrymanCurrentPrice += FERRYMAN_PRICE_INCREASE_PER_ATTEMPT;
         }
 
         require(
@@ -432,6 +435,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         tokenIdToEnterDungeonRollResult[tokenId] = uint256(0x0);
         tokenIdToMonsterBattleRollResult[tokenId] = uint256(0x0);
         lootTimeLock[tokenId] = uint256(0x0);
+        agreedFerrymanPrice[tokenId] = uint256(0x0);
 
         IERC721 lootContract = IERC721(lootAddress);
         lootContract.transferFrom(address(this), ogOwner, tokenId);
@@ -681,7 +685,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         nonReentrant
     {
         require(
-            msg.value >= ferrymanPrice,
+            msg.value >= agreedFerrymanPrice[tokenId],
             "The amount of eth paid is not enough to bribe the ferryman"
         );
 
@@ -885,7 +889,7 @@ contract LootDungeon is ERC1155, VRFConsumerBase, Ownable, ReentrancyGuard {
         onlyOwner
         onlyIfNotLocked
     {
-        ferrymanPrice = newPrice;
+        ferrymanCurrentPrice = newPrice;
     }
 
     function setLinkFee(uint256 newFee) external onlyOwner {

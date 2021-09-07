@@ -1,8 +1,12 @@
 import { NextPage } from 'next'
 import styles from '@styles/pages/Dungeon.module.scss'
 import Layout from '@components/Layout'
-import DungeonComponent from '@components/Dungeon'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+
+const Dynamic = dynamic(() => import('@components/Dungeon'), {
+  ssr: false,
+})
 
 const Dungeon: NextPage = () => {
   const router = useRouter()
@@ -12,7 +16,7 @@ const Dungeon: NextPage = () => {
   return (
     <Layout>
       <div className={styles.container}>
-        <DungeonComponent tokenId={tokenId} />
+        <Dynamic tokenId={tokenId} />
       </div>
     </Layout>
   )

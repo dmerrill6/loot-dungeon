@@ -65,6 +65,9 @@ const Home: NextPage = () => {
         <div className={styles.main_link}>
           <Link href={`https://opensea.io/`}>OpenSea</Link>
         </div>
+        <div className={styles.main_link}>
+          <Link href={`/ferryman`}>Ferryman's fee</Link>
+        </div>
       </div>
       <div className={styles.social}>
         <a

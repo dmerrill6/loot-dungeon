@@ -576,10 +576,12 @@ contract("LootDungeon", (accounts) => {
 
     it("should allow reviving", async () => {
       let err;
+      const price = await dungeon.agreedFerrymanPrice.call(newTokenId);
+      console.log("price", price.toString());
       try {
         await dungeon.bribeFerryman(newTokenId, {
           from: mainAccount,
-          value: web3.utils.toWei("5", "ether"),
+          value: price,
         });
       } catch (error) {
         err = error;

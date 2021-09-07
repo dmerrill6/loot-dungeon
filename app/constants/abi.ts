@@ -767,6 +767,19 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [],
+    name: 'FERRYMAN_PRICE_INCREASE_PER_ATTEMPT',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'GENESIS_CARD',
     outputs: [
       {
@@ -961,19 +974,6 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'WRAPPED_TOKEN_OFFSET',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'uint256',
@@ -1089,6 +1089,25 @@ export const ERC1155_LootDungeon = [
     name: 'adjustPlayerStats',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'agreedFerrymanPrice',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -1455,7 +1474,7 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [],
-    name: 'ferrymanPrice',
+    name: 'ferrymanCurrentPrice',
     outputs: [
       {
         internalType: 'uint256',

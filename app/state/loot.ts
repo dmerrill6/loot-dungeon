@@ -7,9 +7,9 @@ import { Contract } from '@ethersproject/contracts' // Ethers
 import { ERC721, ERC1155_LootDungeon } from '@constants/abi' // ABIs
 
 // Types
-import type { BigNumber } from '@ethersproject/bignumber' // BigNumber
+import type { BigNumber, BigNumberish } from '@ethersproject/bignumber' // BigNumber
 import { useState } from 'react'
-import { BATTLE_PRICE, ESCAPE_PRICE, FERRYMAN_PRICE } from '@constants/fees'
+import { BATTLE_PRICE, ESCAPE_PRICE } from '@constants/fees'
 import { MAX_ROUNDS_PER_BATTLE } from '@constants/misc'
 
 export interface BattleRoundResult {
@@ -52,6 +52,9 @@ function useLoot() {
   // Collect auth provider and user address
   const { provider, address, setAddress } = wallet.useContainer()
   const [isApproved, setIsApproved] = useState<boolean>(false)
+  const [ferrymanCurrentPrice, setFerrymanCurrentPrice] = useState<
+    string | null
+  >(null)
   const [encounteredMonsters, setEncounteredMonsters] = useState<{
     [key: string]: ContractMonster
   }>({})
@@ -327,12 +330,22 @@ function useLoot() {
     }
   }
 
+  async function getFerrymanAgreedPrice(
+    tokenId: string
+  ): Promise<BigNumberish> {
+    const { dungeon }: { dungeon: Contract } = collectContracts()
+
+    const price = await dungeon['agreedFerrymanPrice(uint256)'](tokenId)
+
+    return price
+  }
+
   async function bribeFerryman(tokenId: string): Promise<void> {
     const { dungeon }: { dungeon: Contract } = collectContracts()
 
     try {
       const tx = await dungeon['bribeFerryman(uint256)'](tokenId, {
-        value: ethers.utils.parseEther(FERRYMAN_PRICE),
+        value: await getFerrymanAgreedPrice(tokenId),
       })
       await tx.wait(1)
       toast.success(
@@ -349,6 +362,18 @@ function useLoot() {
 
     const hasEnough = await dungeon.hasEnoughLink()
     return hasEnough
+  }
+
+  async function refreshFerrymanPrice(): Promise<BigNumberish | null> {
+    const { dungeon }: { dungeon: Contract } = collectContracts()
+
+    if (dungeon) {
+      const ferrymanCurrentPrice = await dungeon.ferrymanCurrentPrice()
+      setFerrymanCurrentPrice(ethers.utils.formatEther(ferrymanCurrentPrice))
+      return ferrymanCurrentPrice
+    }
+
+    return null
   }
 
   return {
@@ -371,6 +396,9 @@ function useLoot() {
     getBattleResultsUpUntilRound,
     claimDrops,
     bribeFerryman,
+    getFerrymanAgreedPrice,
+    ferrymanCurrentPrice,
+    refreshFerrymanPrice,
   }
 }
 

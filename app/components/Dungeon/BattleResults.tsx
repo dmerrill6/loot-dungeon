@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { BattleRoundResult } from '@state/loot'
 import Image from 'next/image'
 import { loot, dungeon } from '@state/index'
@@ -6,7 +7,6 @@ import Loading from 'react-loading'
 import Button from '@components/Button'
 import { toast } from 'react-toastify'
 import styles from '@styles/components/Dungeon.module.scss'
-import { FERRYMAN_PRICE } from '@constants/fees'
 import { useRouter } from 'next/router'
 
 const battleTimeout = (battleResults: BattleRoundResult) =>
@@ -23,6 +23,7 @@ export default function BattleResults({
     claimDrops,
     getBattleResultsUpUntilRound,
     bribeFerryman,
+    getFerrymanAgreedPrice,
   } = loot.useContainer()
   const router = useRouter()
 
@@ -30,14 +31,22 @@ export default function BattleResults({
     getEncounteredMonster(tokenId)
   }, [tokenId])
 
-  const { refreshDungeonState } = dungeon.useContainer()
+  const { refreshDungeonState, dungeonState } = dungeon.useContainer()
 
   const monster = encounteredMonsters[tokenId]
   const [round, setRound] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
+  const [ferrymanPrice, setFerrymanPrice] = useState<string>('Loading...')
+
   const [roundResults, setRoundResults] = useState<{
     [key: string]: BattleRoundResult
   }>({})
+
+  useEffect(() => {
+    getFerrymanAgreedPrice(tokenId).then((price) =>
+      setFerrymanPrice(ethers.utils.formatEther(price))
+    )
+  }, [tokenId, dungeonState])
 
   if (!monster) return <Loading type="spin" />
 
@@ -136,7 +145,7 @@ export default function BattleResults({
           <p className={styles.story}>
             Feeling extreme pain, you start to feel surrounded in darkness.
             Drowning in the darkest shade of black, you suddenly awaken, soaring
-            from the sea. A ferryman is waiting for you. You climb onto his
+            from the sea. A ferryman is waiting for you. You climb into his
             boat.
           </p>
           <Image
@@ -169,7 +178,7 @@ export default function BattleResults({
               setLoading(false)
             }}
           >
-            Bribe the ferryman ({FERRYMAN_PRICE} ETH)
+            Bribe the ferryman ({ferrymanPrice} ETH)
           </Button>
         </div>
       ) : null}

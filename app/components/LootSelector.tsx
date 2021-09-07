@@ -10,7 +10,7 @@ export default function LootSelector({
   tokenId,
   render,
   title,
-  path,
+  path = 'dungeon',
   forceOwner = true,
 }: {
   title?: string
