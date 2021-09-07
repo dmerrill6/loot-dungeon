@@ -95,9 +95,9 @@ function Header(): ReactElement {
     <div className={styles.header}>
       <div className={styles.logo}>
         <Link href="/">
-          <a>
-            <h3>Loot Dungeon</h3>
-          </a>
+          <h3>
+            <a>Loot Dungeon</a>
+          </h3>
         </Link>
       </div>
 

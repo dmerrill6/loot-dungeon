@@ -15,7 +15,9 @@ const FAQ: NextPage = () => {
         {faq.map((item, index) => (
           <div key={index} className={styles.item}>
             <div className={styles.question} onClick={() => setOpen(index)}>
-              <h4>{item.q}</h4>
+              <h4>
+                <a>{item.q}</a>
+              </h4>
             </div>
             <div
               className={classnames(
