@@ -213,14 +213,20 @@ export default [
   {
     q: 'Can the variables in the smart contract be changed?',
     a: (
-      <p>
-        The owner of the contract can adjust the following variables: Monster
-        stats, player base stats, fees, and maximum rounds per battle. However,
-        these amounts will only be changed if there's a balancing mistake and as
-        soon as the authors are confident on the values, they will call the
-        `lockFromAdditionalChanges` function which locks the contract from any
-        additional adjustment.
-      </p>
+      <>
+        <p>
+          The owner of the contract can adjust the following variables: Monster
+          stats, player base stats, fees, and maximum rounds per battle.
+          However, these amounts will only be changed if there's a balancing
+          mistake and as soon as the authors are confident on the values, they
+          will call the `lockFromAdditionalChanges` function which locks the
+          contract from any additional adjustment.
+        </p>
+        <p>
+          The owner cannot mint new NFTs, burn NFTs, or take actions in place of
+          the players.
+        </p>
+      </>
     ),
   },
   {
@@ -234,10 +240,22 @@ export default [
     ),
   },
   {
+    q: 'How was the art generated?',
+    a: (
+      <p>
+        We used an amazing GAN created by{' '}
+        <a href="https://twitter.com/dribnet" target="_blank" rel="noreferrer">
+          @dribnet
+        </a>{' '}
+        called CLIPIT.
+      </p>
+    ),
+  },
+  {
     q: 'My question is not answered here',
     a: (
       <p>
-        Go to our{' '}
+        Please go to our{' '}
         <a
           href="https://discord.gg/z6azBRgZ3J"
           target="_blank"
@@ -245,7 +263,7 @@ export default [
         >
           Discord
         </a>{' '}
-        and ask as much as you want.
+        and ask!
       </p>
     ),
   },
