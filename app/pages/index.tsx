@@ -41,7 +41,7 @@ const Home: NextPage = () => {
           </a>
           ) and your Loot stats. By winning battles you can claim unique and
           rare items. Each monster drops a guaranteed item and might drop a rare
-          card.
+          card. Items are ERC1155 NFTs containing machine-generated pixel art.
         </p>
         <Button
           className={styles.cta}
