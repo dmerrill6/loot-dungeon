@@ -147,10 +147,10 @@ contract LootDungeonV2 is VRFConsumerBase, Ownable, ReentrancyGuard, ERC1155 {
     uint256 private s_fee;
     bool private isTestNetwork;
 
-    uint256 public escapePrice = 2 ether;
-    uint256 public battlePrice = 1 ether;
-    uint256 public ferrymanCurrentPrice = 2.5 ether;
-    uint256 public ferrymanPriceIncreasePerAttempt = 0.25 ether;
+    uint256 public escapePrice = 0.04 ether;
+    uint256 public battlePrice = 0.02 ether;
+    uint256 public ferrymanCurrentPrice = 0.05 ether;
+    uint256 public ferrymanPriceIncreasePerAttempt = 0.005 ether;
 
     Item public basePlayerStats = Item(10, 0, 2, 1, 1);
     bool public lockSettings = false;

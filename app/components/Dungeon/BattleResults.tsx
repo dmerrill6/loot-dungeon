@@ -1,13 +1,14 @@
 import { ethers } from 'ethers'
 import { BattleRoundResult } from '@state/loot'
 import Image from 'next/image'
-import { loot, dungeon } from '@state/index'
+import { loot, dungeon, wallet } from '@state/index'
 import React, { ReactElement, useEffect, useState } from 'react'
 import Loading from 'react-loading'
 import Button from '@components/Button'
 import { toast } from 'react-toastify'
 import styles from '@styles/components/Dungeon.module.scss'
 import { useRouter } from 'next/router'
+import networkIdToName, { NetworkId } from '@utils/networkIdToName'
 
 const battleTimeout = (battleResults: BattleRoundResult) =>
   battleResults.won && battleResults.monsterHp > 0 && battleResults.playerHp > 0
@@ -32,6 +33,7 @@ export default function BattleResults({
   }, [tokenId])
 
   const { refreshDungeonState, dungeonState } = dungeon.useContainer()
+  const { networkId } = wallet.useContainer()
 
   const monster = encounteredMonsters[tokenId]
   const [round, setRound] = useState<number>(0)
@@ -178,7 +180,9 @@ export default function BattleResults({
               setLoading(false)
             }}
           >
-            Bribe the ferryman ({ferrymanPrice} ETH)
+            Bribe the ferryman ({ferrymanPrice}{' '}
+            {networkIdToName(networkId) === NetworkId.polygon ? 'MATIC' : 'ETH'}
+            )
           </Button>
         </div>
       ) : null}
