@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect } from 'react'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Layout from '@components/Layout'
@@ -12,22 +12,19 @@ import { NetworkId } from '@utils/networkIdToName'
 
 const Home: NextPage = () => {
   const router = useRouter()
+  const [networkId, setNetworkId] = React.useState<NetworkId | null>(null)
 
-  const subdomainNetworkId = useMemo(
-    () => getNetworkIdFromSubdomain(getSubdomain()),
-    []
-  )
+  useEffect(() => {
+    const subdomainNetworkId = getNetworkIdFromSubdomain(getSubdomain())
+    setNetworkId(subdomainNetworkId)
+  }, [])
 
   return (
     <Layout>
       <div className={styles.container}>
         <div className={styles.title}>
-          {subdomainNetworkId === NetworkId.mainnet ? (
-            <h1>Loot Dungeon</h1>
-          ) : null}
-          {subdomainNetworkId === NetworkId.polygon ? (
-            <h1>[Poly]Loot Dungeon</h1>
-          ) : null}
+          {networkId === NetworkId.mainnet ? <h1>Loot Dungeon</h1> : null}
+          {networkId === NetworkId.polygon ? <h1>[Poly]Loot Dungeon</h1> : null}
         </div>
         <p className={styles.subtitle}>
           Bring your Loot. Battle monsters. Earn NFT rewards.
@@ -63,7 +60,7 @@ const Home: NextPage = () => {
         >
           Enter the Dungeon
         </Button>
-        {subdomainNetworkId === NetworkId.mainnet ? (
+        {networkId === NetworkId.mainnet ? (
           <div className={styles.alternative}>
             <h4>Don't have any Loot to stake?</h4>
             <Button
@@ -74,7 +71,7 @@ const Home: NextPage = () => {
             </Button>
           </div>
         ) : null}
-        {subdomainNetworkId === NetworkId.polygon ? (
+        {networkId === NetworkId.polygon ? (
           <div className={styles.alternative}>
             <h4>Ready to try the mainnet version?</h4>
             <Button
@@ -99,7 +96,7 @@ const Home: NextPage = () => {
             target="_blank"
             rel="noreferrer"
             href={
-              subdomainNetworkId === NetworkId.polygon
+              networkId === NetworkId.polygon
                 ? 'https://polygonscan.com/address/0x54a87d8aef21e3e8aa3192f928f125496e20d159'
                 : `https://etherscan.io/address/0xdc9d70e37662ce16615224efaa9bb2315b80e36b`
             }
@@ -112,7 +109,7 @@ const Home: NextPage = () => {
             target="_blank"
             rel="noreferrer"
             href={
-              subdomainNetworkId === NetworkId.polygon
+              networkId === NetworkId.polygon
                 ? `https://opensea.io/collection/polyloot-dungeon`
                 : `https://opensea.io/collection/loot-dungeon`
             }

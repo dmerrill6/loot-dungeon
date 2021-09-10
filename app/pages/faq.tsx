@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import Layout from '@components/Layout'
 import type { NextPage } from 'next'
 import styles from '@styles/pages/FAQ.module.scss'
@@ -7,18 +7,23 @@ import classnames from 'classnames'
 import { useRouter } from 'next/router'
 import getSubdomain from '@utils/getSubdomain'
 import getNetworkIdFromSubdomain from '@utils/getNetworkFromSubdomain'
+import { NetworkId } from '@utils/networkIdToName'
 
 const FAQ: NextPage = () => {
   const [open, setOpen] = useState<number>(0)
 
-  const subdomain = getSubdomain()
-  const network = getNetworkIdFromSubdomain(subdomain)
+  const [networkId, setNetworkId] = React.useState<NetworkId | null>(null)
+
+  useEffect(() => {
+    const subdomainNetworkId = getNetworkIdFromSubdomain(getSubdomain())
+    setNetworkId(subdomainNetworkId)
+  }, [])
 
   return (
     <Layout>
       <div className={styles.container}>
         <h1 className={styles.title}>FAQ</h1>
-        {faq(network).map((item, index) => (
+        {faq(networkId).map((item, index) => (
           <div key={index} className={styles.item}>
             <div className={styles.question} onClick={() => setOpen(index)}>
               <h4>

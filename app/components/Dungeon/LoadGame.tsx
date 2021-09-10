@@ -17,6 +17,8 @@ export default function LoadGame({
   const [tokenId, setTokenId] = useState<string>('')
   const router = useRouter()
 
+  console.log(networkId)
+
   if (!address) {
     return <p className="center">Please connect your wallet to continue</p>
   }

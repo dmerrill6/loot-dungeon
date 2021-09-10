@@ -80,7 +80,18 @@ function useWallet() {
             const provider = new ethers.providers.Web3Provider(wallet.provider)
 
             // Update provider, address, and raw address
+            const currNetwork = await (await provider.getNetwork()).chainId
+            const currSubdomainNetwork = getNetworkIdFromSubdomain(
+              getSubdomain()
+            )
+
+            if (networkIdToName(currNetwork) !== currSubdomainNetwork) {
+              setWrongNetwork(true)
+              return
+            }
+            setWrongNetwork(false)
             setProvider(provider)
+            setNetworkId(currNetwork)
             process.browser
               ? localStorage.setItem(WALLET_STORAGE_KEY, wallet.name || '')
               : null
