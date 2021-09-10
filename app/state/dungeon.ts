@@ -25,14 +25,16 @@ function useDungeon() {
   async function refreshDungeonState(tokenId?: string): Promise<DungeonState> {
     if (!address) return DungeonState.notConnected
     if (!tokenId) return DungeonState.notConnected
-
     try {
       const isOwnerOfLoot = await loot.isOwnerOfLoot(tokenId)
       setOwnsLoot({
         ...ownsLoot,
         [tokenId]: isOwnerOfLoot,
       })
-
+    } catch (e) {
+      console.log(e)
+    }
+    try {
       const hasEntered = await loot.hasEnteredTheDungeon(tokenId)
 
       if (!hasEntered) {

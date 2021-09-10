@@ -312,41 +312,18 @@ export const ERC721 = [
 export const ERC1155_LootDungeon = [
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: 'vrfCoordinator',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'link',
-        type: 'address',
-      },
-      {
-        internalType: 'bytes32',
-        name: 'keyHash',
-        type: 'bytes32',
-      },
-      {
-        internalType: 'uint256',
-        name: 'fee',
-        type: 'uint256',
-      },
+      { internalType: 'address', name: 'vrfCoordinator', type: 'address' },
+      { internalType: 'address', name: 'link', type: 'address' },
+      { internalType: 'bytes32', name: 'keyHash', type: 'bytes32' },
+      { internalType: 'uint256', name: 'fee', type: 'uint256' },
       {
         internalType: 'address',
         name: '_proxyRegistryAddress',
         type: 'address',
       },
-      {
-        internalType: 'address',
-        name: '_lootAddress',
-        type: 'address',
-      },
-      {
-        internalType: 'bool',
-        name: '_isTestNetwork',
-        type: 'bool',
-      },
+      { internalType: 'address', name: '_lootAddress', type: 'address' },
+      { internalType: 'address', name: '_mLootAddress', type: 'address' },
+      { internalType: 'bool', name: '_isTestNetwork', type: 'bool' },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -366,12 +343,7 @@ export const ERC1155_LootDungeon = [
         name: 'operator',
         type: 'address',
       },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'approved',
-        type: 'bool',
-      },
+      { indexed: false, internalType: 'bool', name: 'approved', type: 'bool' },
     ],
     name: 'ApprovalForAll',
     type: 'event',
@@ -467,18 +439,8 @@ export const ERC1155_LootDungeon = [
         name: 'operator',
         type: 'address',
       },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'to', type: 'address' },
       {
         indexed: false,
         internalType: 'uint256[]',
@@ -504,24 +466,9 @@ export const ERC1155_LootDungeon = [
         name: 'operator',
         type: 'address',
       },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'id',
-        type: 'uint256',
-      },
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'to', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'id', type: 'uint256' },
       {
         indexed: false,
         internalType: 'uint256',
@@ -535,18 +482,8 @@ export const ERC1155_LootDungeon = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'value',
-        type: 'string',
-      },
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'id',
-        type: 'uint256',
-      },
+      { indexed: false, internalType: 'string', name: 'value', type: 'string' },
+      { indexed: true, internalType: 'uint256', name: 'id', type: 'uint256' },
     ],
     name: 'URI',
     type: 'event',
@@ -586,388 +523,222 @@ export const ERC1155_LootDungeon = [
   {
     inputs: [],
     name: 'DEMON_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'DEMON_HEAD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'DEMON_ID',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'DRAGON_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'DRAGON_EYE',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'DRAGON_ID',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'ESCAPE_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'ESCAPE_NFT_CLAIMED',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'ESCAPE_NFT_READY_TO_CLAIM',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'ESCAPE_NFT_UNCLAIMABLE',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'FERRYMAN_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'FERRYMAN_NFT_CLAIMED',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'FERRYMAN_NFT_READY_TO_CLAIM',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'FERRYMAN_NFT_UNCLAIMABLE',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'GENESIS_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'LOOT_TIME_LOCK',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'LUCKY_DROP_CHANCE_1_IN',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'MINOTAUR_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'MINOTAUR_HORNS',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'MINOTAUR_ID',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'RAT_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'RAT_ID',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'RAT_MEAT',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'SKELETON_BONES',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'SKELETON_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'SKELETON_ID',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'SUCCUBUS_CARD',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'SUCCUBUS_ID',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'SUCCUBUS_WINGS',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'maxRounds',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: 'newAddress', type: 'address' }],
+    name: 'adjustLootAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'newAddress', type: 'address' }],
+    name: 'adjustMLootAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'maxRounds', type: 'uint256' }],
     name: 'adjustMaxRounds',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -977,61 +748,21 @@ export const ERC1155_LootDungeon = [
     inputs: [
       {
         components: [
-          {
-            internalType: 'string',
-            name: 'name',
-            type: 'string',
-          },
-          {
-            internalType: 'uint256',
-            name: 'id',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'hp',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'armor',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'attack',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'agility',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'dexterity',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'guaranteedDrop',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'luckyDrop',
-            type: 'uint256',
-          },
+          { internalType: 'string', name: 'name', type: 'string' },
+          { internalType: 'uint256', name: 'id', type: 'uint256' },
+          { internalType: 'uint256', name: 'hp', type: 'uint256' },
+          { internalType: 'uint256', name: 'armor', type: 'uint256' },
+          { internalType: 'uint256', name: 'attack', type: 'uint256' },
+          { internalType: 'uint256', name: 'agility', type: 'uint256' },
+          { internalType: 'uint256', name: 'dexterity', type: 'uint256' },
+          { internalType: 'uint256', name: 'guaranteedDrop', type: 'uint256' },
+          { internalType: 'uint256', name: 'luckyDrop', type: 'uint256' },
         ],
-        internalType: 'struct LootDungeon.Monster',
+        internalType: 'struct LootDungeonV2.Monster',
         name: 'adjustedMonster',
         type: 'tuple',
       },
-      {
-        internalType: 'uint256',
-        name: 'monsterIndex',
-        type: 'uint256',
-      },
+      { internalType: 'uint256', name: 'monsterIndex', type: 'uint256' },
     ],
     name: 'adjustMonster',
     outputs: [],
@@ -1042,33 +773,13 @@ export const ERC1155_LootDungeon = [
     inputs: [
       {
         components: [
-          {
-            internalType: 'uint256',
-            name: 'hp',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'armor',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'attack',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'agility',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'dexterity',
-            type: 'uint256',
-          },
+          { internalType: 'uint256', name: 'hp', type: 'uint256' },
+          { internalType: 'uint256', name: 'armor', type: 'uint256' },
+          { internalType: 'uint256', name: 'attack', type: 'uint256' },
+          { internalType: 'uint256', name: 'agility', type: 'uint256' },
+          { internalType: 'uint256', name: 'dexterity', type: 'uint256' },
         ],
-        internalType: 'struct LootDungeon.Item',
+        internalType: 'struct LootDungeonV2.Item',
         name: 'newStats',
         type: 'tuple',
       },
@@ -1079,69 +790,29 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'agreedFerrymanPrice',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'id',
-        type: 'uint256',
-      },
+      { internalType: 'address', name: 'account', type: 'address' },
+      { internalType: 'uint256', name: 'id', type: 'uint256' },
     ],
     name: 'balanceOf',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      {
-        internalType: 'address[]',
-        name: 'accounts',
-        type: 'address[]',
-      },
-      {
-        internalType: 'uint256[]',
-        name: 'ids',
-        type: 'uint256[]',
-      },
+      { internalType: 'address[]', name: 'accounts', type: 'address[]' },
+      { internalType: 'uint256[]', name: 'ids', type: 'uint256[]' },
     ],
     name: 'balanceOfBatch',
-    outputs: [
-      {
-        internalType: 'uint256[]',
-        name: '',
-        type: 'uint256[]',
-      },
-    ],
+    outputs: [{ internalType: 'uint256[]', name: '', type: 'uint256[]' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -1149,75 +820,31 @@ export const ERC1155_LootDungeon = [
     inputs: [],
     name: 'basePlayerStats',
     outputs: [
-      {
-        internalType: 'uint256',
-        name: 'hp',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'armor',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'attack',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'agility',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'dexterity',
-        type: 'uint256',
-      },
+      { internalType: 'uint256', name: 'hp', type: 'uint256' },
+      { internalType: 'uint256', name: 'armor', type: 'uint256' },
+      { internalType: 'uint256', name: 'attack', type: 'uint256' },
+      { internalType: 'uint256', name: 'agility', type: 'uint256' },
+      { internalType: 'uint256', name: 'dexterity', type: 'uint256' },
     ],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'battleMonster',
-    outputs: [
-      {
-        internalType: 'bytes32',
-        name: 'requestId',
-        type: 'bytes32',
-      },
-    ],
+    outputs: [{ internalType: 'bytes32', name: 'requestId', type: 'bytes32' }],
     stateMutability: 'payable',
     type: 'function',
   },
   {
     inputs: [],
     name: 'battlePrice',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'bribeFerryman',
     outputs: [],
     stateMutability: 'payable',
@@ -1226,80 +853,32 @@ export const ERC1155_LootDungeon = [
   {
     inputs: [],
     name: 'canClaimEscapeCard',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'canClaimFerrymanCard',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'round',
-        type: 'uint256',
-      },
-      {
-        internalType: 'int256',
-        name: 'lastRoundPlayerHp',
-        type: 'int256',
-      },
-      {
-        internalType: 'int256',
-        name: 'lastRoundMonsterHp',
-        type: 'int256',
-      },
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'round', type: 'uint256' },
+      { internalType: 'int256', name: 'lastRoundPlayerHp', type: 'int256' },
+      { internalType: 'int256', name: 'lastRoundMonsterHp', type: 'int256' },
       {
         components: [
-          {
-            internalType: 'uint256',
-            name: 'hp',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'armor',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'attack',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'agility',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'dexterity',
-            type: 'uint256',
-          },
+          { internalType: 'uint256', name: 'hp', type: 'uint256' },
+          { internalType: 'uint256', name: 'armor', type: 'uint256' },
+          { internalType: 'uint256', name: 'attack', type: 'uint256' },
+          { internalType: 'uint256', name: 'agility', type: 'uint256' },
+          { internalType: 'uint256', name: 'dexterity', type: 'uint256' },
         ],
-        internalType: 'struct LootDungeon.Item',
+        internalType: 'struct LootDungeonV2.Item',
         name: 'playerBaseStats',
         type: 'tuple',
       },
@@ -1308,28 +887,12 @@ export const ERC1155_LootDungeon = [
     outputs: [
       {
         components: [
-          {
-            internalType: 'bool',
-            name: 'hasNextRound',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'won',
-            type: 'bool',
-          },
-          {
-            internalType: 'int256',
-            name: 'playerHp',
-            type: 'int256',
-          },
-          {
-            internalType: 'int256',
-            name: 'monsterHp',
-            type: 'int256',
-          },
+          { internalType: 'bool', name: 'hasNextRound', type: 'bool' },
+          { internalType: 'bool', name: 'won', type: 'bool' },
+          { internalType: 'int256', name: 'playerHp', type: 'int256' },
+          { internalType: 'int256', name: 'monsterHp', type: 'int256' },
         ],
-        internalType: 'struct LootDungeon.BattleRoundResult',
+        internalType: 'struct LootDungeonV2.BattleRoundResult',
         name: '',
         type: 'tuple',
       },
@@ -1339,53 +902,21 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'round',
-        type: 'uint256',
-      },
-      {
-        internalType: 'int256',
-        name: 'lastRoundPlayerHp',
-        type: 'int256',
-      },
-      {
-        internalType: 'int256',
-        name: 'lastRoundMonsterHp',
-        type: 'int256',
-      },
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'round', type: 'uint256' },
+      { internalType: 'int256', name: 'lastRoundPlayerHp', type: 'int256' },
+      { internalType: 'int256', name: 'lastRoundMonsterHp', type: 'int256' },
     ],
     name: 'checkBattleResultsNoCache',
     outputs: [
       {
         components: [
-          {
-            internalType: 'bool',
-            name: 'hasNextRound',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'won',
-            type: 'bool',
-          },
-          {
-            internalType: 'int256',
-            name: 'playerHp',
-            type: 'int256',
-          },
-          {
-            internalType: 'int256',
-            name: 'monsterHp',
-            type: 'int256',
-          },
+          { internalType: 'bool', name: 'hasNextRound', type: 'bool' },
+          { internalType: 'bool', name: 'won', type: 'bool' },
+          { internalType: 'int256', name: 'playerHp', type: 'int256' },
+          { internalType: 'int256', name: 'monsterHp', type: 'int256' },
         ],
-        internalType: 'struct LootDungeon.BattleRoundResult',
+        internalType: 'struct LootDungeonV2.BattleRoundResult',
         name: '',
         type: 'tuple',
       },
@@ -1394,13 +925,7 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'claimDrops',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -1421,26 +946,14 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'enterTheDungeon',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'escapeFromDungeon',
     outputs: [],
     stateMutability: 'payable',
@@ -1449,101 +962,41 @@ export const ERC1155_LootDungeon = [
   {
     inputs: [],
     name: 'escapePrice',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'ferrymanCurrentPrice',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'ferrymanPriceIncreasePerAttempt',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'getEncounteredMonster',
     outputs: [
       {
         components: [
-          {
-            internalType: 'string',
-            name: 'name',
-            type: 'string',
-          },
-          {
-            internalType: 'uint256',
-            name: 'id',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'hp',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'armor',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'attack',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'agility',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'dexterity',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'guaranteedDrop',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'luckyDrop',
-            type: 'uint256',
-          },
+          { internalType: 'string', name: 'name', type: 'string' },
+          { internalType: 'uint256', name: 'id', type: 'uint256' },
+          { internalType: 'uint256', name: 'hp', type: 'uint256' },
+          { internalType: 'uint256', name: 'armor', type: 'uint256' },
+          { internalType: 'uint256', name: 'attack', type: 'uint256' },
+          { internalType: 'uint256', name: 'agility', type: 'uint256' },
+          { internalType: 'uint256', name: 'dexterity', type: 'uint256' },
+          { internalType: 'uint256', name: 'guaranteedDrop', type: 'uint256' },
+          { internalType: 'uint256', name: 'luckyDrop', type: 'uint256' },
         ],
-        internalType: 'struct LootDungeon.Monster',
+        internalType: 'struct LootDungeonV2.Monster',
         name: '',
         type: 'tuple',
       },
@@ -1552,76 +1005,32 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'getLootOwner',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'getRemainingMonsterCount',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'getStats',
     outputs: [
       {
         components: [
-          {
-            internalType: 'uint256',
-            name: 'hp',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'armor',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'attack',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'agility',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'dexterity',
-            type: 'uint256',
-          },
+          { internalType: 'uint256', name: 'hp', type: 'uint256' },
+          { internalType: 'uint256', name: 'armor', type: 'uint256' },
+          { internalType: 'uint256', name: 'attack', type: 'uint256' },
+          { internalType: 'uint256', name: 'agility', type: 'uint256' },
+          { internalType: 'uint256', name: 'dexterity', type: 'uint256' },
         ],
-        internalType: 'struct LootDungeon.Item',
+        internalType: 'struct LootDungeonV2.Item',
         name: '',
         type: 'tuple',
       },
@@ -1632,94 +1041,38 @@ export const ERC1155_LootDungeon = [
   {
     inputs: [],
     name: 'hasEnoughLink',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'hasEnteredTheDungeon',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'hasFinishedBattle',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'hasStartedBattle',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: '_owner',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_operator',
-        type: 'address',
-      },
+      { internalType: 'address', name: '_owner', type: 'address' },
+      { internalType: 'address', name: '_operator', type: 'address' },
     ],
     name: 'isApprovedForAll',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -1733,135 +1086,58 @@ export const ERC1155_LootDungeon = [
   {
     inputs: [],
     name: 'lockSettings',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'lootAddress',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'lootOwners',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'lootTimeLock',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'mLootAddress',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'maxRoundsPerBattle',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'monsterArray',
     outputs: [
-      {
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'id',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'hp',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'armor',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'attack',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'agility',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'dexterity',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'guaranteedDrop',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'luckyDrop',
-        type: 'uint256',
-      },
+      { internalType: 'string', name: 'name', type: 'string' },
+      { internalType: 'uint256', name: 'id', type: 'uint256' },
+      { internalType: 'uint256', name: 'hp', type: 'uint256' },
+      { internalType: 'uint256', name: 'armor', type: 'uint256' },
+      { internalType: 'uint256', name: 'attack', type: 'uint256' },
+      { internalType: 'uint256', name: 'agility', type: 'uint256' },
+      { internalType: 'uint256', name: 'dexterity', type: 'uint256' },
+      { internalType: 'uint256', name: 'guaranteedDrop', type: 'uint256' },
+      { internalType: 'uint256', name: 'luckyDrop', type: 'uint256' },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -1869,41 +1145,21 @@ export const ERC1155_LootDungeon = [
   {
     inputs: [],
     name: 'owner',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'proxyRegistryAddress',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      {
-        internalType: 'bytes32',
-        name: 'requestId',
-        type: 'bytes32',
-      },
-      {
-        internalType: 'uint256',
-        name: 'randomness',
-        type: 'uint256',
-      },
+      { internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+      { internalType: 'uint256', name: 'randomness', type: 'uint256' },
     ],
     name: 'rawFulfillRandomness',
     outputs: [],
@@ -1911,21 +1167,9 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'remainingMonsterCount',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -1938,31 +1182,11 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256[]',
-        name: 'ids',
-        type: 'uint256[]',
-      },
-      {
-        internalType: 'uint256[]',
-        name: 'amounts',
-        type: 'uint256[]',
-      },
-      {
-        internalType: 'bytes',
-        name: 'data',
-        type: 'bytes',
-      },
+      { internalType: 'address', name: 'from', type: 'address' },
+      { internalType: 'address', name: 'to', type: 'address' },
+      { internalType: 'uint256[]', name: 'ids', type: 'uint256[]' },
+      { internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' },
+      { internalType: 'bytes', name: 'data', type: 'bytes' },
     ],
     name: 'safeBatchTransferFrom',
     outputs: [],
@@ -1971,31 +1195,11 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'id',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bytes',
-        name: 'data',
-        type: 'bytes',
-      },
+      { internalType: 'address', name: 'from', type: 'address' },
+      { internalType: 'address', name: 'to', type: 'address' },
+      { internalType: 'uint256', name: 'id', type: 'uint256' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { internalType: 'bytes', name: 'data', type: 'bytes' },
     ],
     name: 'safeTransferFrom',
     outputs: [],
@@ -2004,16 +1208,8 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: 'operator',
-        type: 'address',
-      },
-      {
-        internalType: 'bool',
-        name: 'approved',
-        type: 'bool',
-      },
+      { internalType: 'address', name: 'operator', type: 'address' },
+      { internalType: 'bool', name: 'approved', type: 'bool' },
     ],
     name: 'setApprovalForAll',
     outputs: [],
@@ -2021,26 +1217,14 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'newPrice',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
     name: 'setBattlePrice',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'newPrice',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
     name: 'setEscapePrice',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -2048,16 +1232,8 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [
-      {
-        internalType: 'uint256',
-        name: 'newPrice',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'newIncrease',
-        type: 'uint256',
-      },
+      { internalType: 'uint256', name: 'newPrice', type: 'uint256' },
+      { internalType: 'uint256', name: 'newIncrease', type: 'uint256' },
     ],
     name: 'setFerrymanPrice',
     outputs: [],
@@ -2065,13 +1241,7 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'newFee',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'newFee', type: 'uint256' }],
     name: 'setLinkFee',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -2091,105 +1261,54 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'string',
-        name: 'newUri',
-        type: 'string',
-      },
-    ],
+    inputs: [{ internalType: 'string', name: 'newUri', type: 'string' }],
     name: 'setUri',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'bytes4',
-        name: 'interfaceId',
-        type: 'bytes4',
-      },
-    ],
+    inputs: [{ internalType: 'bytes4', name: 'interfaceId', type: 'bytes4' }],
     name: 'supportsInterface',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'tokenIdToEnterDungeonRollResult',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'tokenIdToMonsterBattleRollResult',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'uri',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
+    outputs: [{ internalType: 'string', name: '', type: 'string' }],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256[]', name: 'tokenIds', type: 'uint256[]' },
+    ],
+    name: 'withdrawBatch',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -2200,13 +1319,7 @@ export const ERC1155_LootDungeon = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tokenId',
-        type: 'uint256',
-      },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'withdrawLoot',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -2214,16 +1327,8 @@ export const ERC1155_LootDungeon = [
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: '_tokenContract',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
+      { internalType: 'address', name: '_tokenContract', type: 'address' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
     name: 'withdrawToken',
     outputs: [],

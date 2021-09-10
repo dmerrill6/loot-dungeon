@@ -7,6 +7,7 @@ import Button from './Button'
 import Input from './Input'
 import wallet from '@state/wallet'
 import { NetworkId } from '@utils/networkIdToName'
+import Error from '@components/Error'
 
 export default function Claim(): ReactElement {
   const { claim } = loot.useContainer()
@@ -72,6 +73,10 @@ export default function Claim(): ReactElement {
           >
             mLoot contract for Polygon.
           </a>
+          <Error type="notice">
+            If you see an error message, it probably means the Loot bag was
+            already claimed by another user.
+          </Error>
         </p>
       ) : null}
     </div>
