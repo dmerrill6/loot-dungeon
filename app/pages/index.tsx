@@ -73,6 +73,16 @@ const Home: NextPage = () => {
         ) : null}
         {networkId === NetworkId.polygon ? (
           <div className={styles.alternative}>
+            <p>
+              Not sure how to connect to Polygon network?{' '}
+              <a
+                href="https://docs.matic.network/docs/develop/metamask/config-polygon-on-metamask"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Read this quick guide
+              </a>
+            </p>
             <h4>Ready to try the mainnet version?</h4>
             <Button
               style="secondary"
