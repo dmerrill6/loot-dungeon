@@ -12,6 +12,9 @@ import type {
   WalletInitOptions,
   WalletModule,
 } from 'bnc-onboard/dist/src/interfaces'
+import getNetworkIdFromSubdomain from '@utils/getNetworkFromSubdomain'
+import getSubdomain from '@utils/getSubdomain'
+import networkIdToName from '@utils/networkIdToName'
 
 // Onboarding wallet providers
 const wallets: (WalletModule | WalletInitOptions)[] = [
@@ -25,7 +28,12 @@ const wallets: (WalletModule | WalletInitOptions)[] = [
 function useWallet() {
   const [address, setAddress] = useState<string | null>(null) // User address
   const [provider, setProvider] = useState<Web3Provider | null>(null) // Ethers provider
-
+  const [networkId, setNetworkId] = useState<number | null>(null) // Ethers provider
+  const [wrongNetwork, setWrongNetwork] = useState<boolean>(false) // Wrong network
+  const subdomainNetworkId = useMemo(
+    () => getNetworkIdFromSubdomain(getSubdomain()),
+    []
+  )
   /**
    * Returns memoized onboard.js provider
    */
@@ -33,7 +41,7 @@ function useWallet() {
     // Onboard provider
     return Onboard({
       // Ethereum network
-      networkId: 1,
+      networkId: subdomainNetworkId,
       // Hide Blocknative branding
       hideBranding: true,
       // Dark mode
@@ -51,8 +59,17 @@ function useWallet() {
           if (account === undefined) {
             setProvider(null)
             setAddress(null)
+            setNetworkId(null)
+            setWrongNetwork(false)
           } else {
             setAddress(account)
+          }
+        },
+        network: async (networkId: number) => {
+          if (networkId !== subdomainNetworkId) {
+            setWrongNetwork(true)
+          } else {
+            setWrongNetwork(false)
           }
         },
         // On wallet update
@@ -69,7 +86,9 @@ function useWallet() {
               : null
           } else {
             // Nullify data
+            setWrongNetwork(false)
             setProvider(null)
+            setNetworkId(null)
             process.browser ? localStorage.removeItem(WALLET_STORAGE_KEY) : null
           }
         },
@@ -117,10 +136,12 @@ function useWallet() {
 
   return {
     provider,
+    networkId,
     address,
     setAddress,
     unlock,
     loadStoredWallet,
+    wrongNetwork,
   }
 }
 

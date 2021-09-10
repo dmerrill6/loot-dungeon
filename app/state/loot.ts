@@ -9,8 +9,9 @@ import { ERC721, ERC1155_LootDungeon } from '@constants/abi' // ABIs
 // Types
 import type { BigNumber, BigNumberish } from '@ethersproject/bignumber' // BigNumber
 import { useState } from 'react'
-import { BATTLE_PRICE, ESCAPE_PRICE } from '@constants/fees'
+import { getBattlePriceInEther, getEscapePriceInEther } from '@constants/fees'
 import { MAX_ROUNDS_PER_BATTLE } from '@constants/misc'
+import { NetworkId } from '@utils/networkIdToName'
 
 export interface BattleRoundResult {
   hasNextRound: boolean
@@ -45,13 +46,15 @@ export interface ContractMonster {
 const LootAddress: string =
   process.env.NEXT_PUBLIC_LOOT_ADDRESS ??
   '0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7'
+
+const MLootAddress: string = process.env.NEXT_PUBLIC_MLOOT_ADDRESS ?? ''
+
 const DungeonAddress: string =
   process.env.NEXT_PUBLIC_LOOT_DUNGEON_ADDRESS ?? ''
 
 function useLoot() {
   // Collect auth provider and user address
-  const { provider, address, setAddress } = wallet.useContainer()
-  const [isApproved, setIsApproved] = useState<boolean>(false)
+  const { provider, address, setAddress, networkId } = wallet.useContainer()
   const [ferrymanCurrentPrice, setFerrymanCurrentPrice] = useState<
     string | null
   >(null)
@@ -59,10 +62,16 @@ function useLoot() {
     [key: string]: ContractMonster
   }>({})
 
-  function collectContracts(): { loot: Contract; dungeon: Contract } {
+  function collectContracts(): {
+    loot: Contract
+    mLoot: Contract
+    dungeon: Contract
+  } {
     return {
       // ERC721 Loot Contract
       loot: new Contract(LootAddress, ERC721, provider?.getSigner()),
+      // ERC721 mLoot contract
+      mLoot: new Contract(MLootAddress, ERC721, provider?.getSigner()),
       // ERC1155 + Loot Dungeon logic
       dungeon: new Contract(
         DungeonAddress,
@@ -72,8 +81,19 @@ function useLoot() {
     }
   }
 
+  function getLootContract(tokenId: string): Contract {
+    const { loot, mLoot } = collectContracts()
+
+    const parsed = parseInt(tokenId, 10)
+    const isMLoot = parsed > 8000
+    const contract = isMLoot ? mLoot : loot
+
+    return contract
+  }
+
   async function isOwnerOfLoot(tokenId: string): Promise<boolean> {
-    const { loot, dungeon } = collectContracts()
+    const { dungeon } = collectContracts()
+    const loot = getLootContract(tokenId)
 
     if (!address) return false
 
@@ -86,15 +106,13 @@ function useLoot() {
     return hasStakedLoot || ownsLoot
   }
 
-  async function refreshIsApproved(): Promise<boolean> {
-    const { loot }: { loot: Contract } = collectContracts()
+  async function refreshIsApproved(tokenId: string): Promise<boolean> {
+    const loot = getLootContract(tokenId)
 
     const isApproved: boolean = await loot.isApprovedForAll(
       address,
       DungeonAddress
     )
-
-    setIsApproved(isApproved)
 
     return isApproved
   }
@@ -246,15 +264,15 @@ function useLoot() {
     return result
   }
 
-  async function approveLootTransactions(): Promise<void> {
-    const { loot }: { loot: Contract } = collectContracts()
+  async function approveLootTransactions(tokenId: string): Promise<void> {
+    const loot = getLootContract(tokenId)
 
     try {
       if (!address) {
         throw new Error('Need to connect wallet first')
       }
 
-      if (await refreshIsApproved()) {
+      if (await refreshIsApproved(tokenId)) {
         toast.success('Approval is not required')
         return
       }
@@ -264,7 +282,6 @@ function useLoot() {
         true
       )
       await tx.wait(1)
-      await refreshIsApproved()
       toast.success('Loot Dungeon was approved to manage your Loot')
     } catch (e) {
       console.log(e)
@@ -290,7 +307,9 @@ function useLoot() {
 
     try {
       const tx = await dungeon['battleMonster(uint256)'](tokenId, {
-        value: ethers.utils.parseEther(BATTLE_PRICE),
+        value: ethers.utils.parseEther(
+          getBattlePriceInEther(networkId ?? NetworkId.mainnet)
+        ),
       })
       await tx.wait(1)
       toast.success('Your battle has started')
@@ -305,7 +324,9 @@ function useLoot() {
 
     try {
       const tx = await dungeon['escapeFromDungeon(uint256)'](tokenId, {
-        value: ethers.utils.parseEther(ESCAPE_PRICE),
+        value: ethers.utils.parseEther(
+          getEscapePriceInEther(networkId ?? NetworkId.mainnet)
+        ),
       })
       await tx.wait(1)
       toast.success('You escaped from the dungeon successfully')
@@ -357,6 +378,19 @@ function useLoot() {
     }
   }
 
+  async function claim(tokenId: string): Promise<void> {
+    const loot = getLootContract(tokenId)
+
+    try {
+      const tx = await loot['claim(uint256)'](tokenId)
+      await tx.wait(1)
+      toast.success(`Loot #${tokenId} was claimed successfully`)
+    } catch (e) {
+      console.log(e)
+      toast.error('Error while claiming Loot')
+    }
+  }
+
   async function hasEnoughLink(): Promise<boolean> {
     const { dungeon }: { dungeon: Contract } = collectContracts()
 
@@ -387,7 +421,6 @@ function useLoot() {
     getPlayerStats,
     getFinalBattleResults,
     isOwnerOfLoot,
-    isApproved,
     enterTheDungeon,
     encounteredMonsters,
     battleMonster,
@@ -399,9 +432,13 @@ function useLoot() {
     getFerrymanAgreedPrice,
     ferrymanCurrentPrice,
     refreshFerrymanPrice,
+    claim,
+    mLootEnabled: () => MLootAddress !== '',
   }
 }
 
 // Create unstated-next container
 const loot = createContainer(useLoot)
 export default loot
+{
+}

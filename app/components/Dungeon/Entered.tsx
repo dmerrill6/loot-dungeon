@@ -3,9 +3,10 @@ import { toast } from 'react-toastify' // Toast notifications
 import React, { ReactElement, useEffect, useState } from 'react'
 import styles from '@styles/components/Dungeon.module.scss'
 import Button from '@components/Button'
-import { loot, dungeon } from '@state/index'
+import { loot, dungeon, wallet } from '@state/index'
 import Loading from 'react-loading'
-import { BATTLE_PRICE, ESCAPE_PRICE } from '@constants/fees'
+import { getBattlePrice, getEscapePrice } from '@constants/fees'
+import networkIdToName from '@utils/networkIdToName'
 
 export default function Entered({
   tokenId,
@@ -20,6 +21,8 @@ export default function Entered({
     hasEnoughLink,
   } = loot.useContainer()
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({})
+
+  const { networkId } = wallet.useContainer()
 
   useEffect(() => {
     getEncounteredMonster(tokenId)
@@ -79,7 +82,7 @@ export default function Entered({
             setLoading({})
           }}
         >
-          Fight monster ({BATTLE_PRICE} ETH)
+          Fight monster ({getBattlePrice(networkIdToName(networkId))})
         </Button>
         <Button
           size="big"
@@ -96,7 +99,7 @@ export default function Entered({
             setLoading({})
           }}
         >
-          Escape to safety ({ESCAPE_PRICE} ETH)
+          Escape to safety ({getEscapePrice(networkIdToName(networkId))})
         </Button>
       </div>
     </div>

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import styles from '@styles/components/Dungeon.module.scss'
 import { ReactElement, useEffect, useRef } from 'react'
 import Error from './Error'
+import loot from '@state/loot'
 
 export default function LootSelector({
   tokenId,
@@ -20,6 +21,7 @@ export default function LootSelector({
   forceOwner?: boolean
 }): ReactElement {
   const { address } = wallet.useContainer()
+  const { mLootEnabled } = loot.useContainer()
   const dungeonContainer = dungeon.useContainer()
 
   const { dungeonState, refreshDungeonState, ownsLoot } = dungeonContainer
@@ -50,7 +52,7 @@ export default function LootSelector({
     return <p className="center">Please connect your wallet to continue</p>
   }
 
-  if (!tokenId || parseInt(tokenId, 10) > 8000) {
+  if (!tokenId || (parseInt(tokenId, 10) > 8000 && !mLootEnabled())) {
     return <LoadGame title={title} path={path} />
   }
 

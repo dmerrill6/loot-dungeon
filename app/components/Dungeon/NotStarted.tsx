@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import Link from 'next/link'
 import dayjs from '@utils/dayjs'
 import styles from '@styles/components/Dungeon.module.scss'
@@ -9,24 +9,31 @@ import { loot, dungeon } from '@state/index'
 import Error from '@components/Error'
 
 const NotStartedModal = ({
-  isApproved,
-  approve,
-  enterTheDungeon,
   tokenId,
   closeModal,
-  refreshDungeonState,
 }: {
-  isApproved: boolean
-  approve: Function
-  enterTheDungeon: Function
   tokenId: string
   closeModal: Function
-  refreshDungeonState: Function
 }): ReactElement => {
   const [loading, setLoading] = useState<boolean>(false)
   const [agreed, setAgreed] = useState<boolean>(false)
+  const [isApproved, setIsApproved] = useState<{ [key: string]: boolean }>({})
 
-  if (!isApproved) {
+  const {
+    approveLootTransactions: approve,
+    enterTheDungeon,
+    refreshIsApproved,
+  } = loot.useContainer()
+
+  const { refreshDungeonState } = dungeon.useContainer()
+
+  useEffect(() => {
+    refreshIsApproved(tokenId).then((approved: boolean) =>
+      setIsApproved({ ...isApproved, [tokenId]: approved })
+    )
+  }, [tokenId])
+
+  if (!isApproved[tokenId]) {
     return (
       <div className="center">
         <h3>Loot Dungeon needs to be approved as an operator of your Loot.</h3>
@@ -41,7 +48,7 @@ const NotStartedModal = ({
           onClick={async () => {
             setLoading(true)
             try {
-              await approve()
+              await approve(tokenId)
             } catch (e) {
               console.log(e)
             }
@@ -113,14 +120,6 @@ export default function NotStarted({
   tokenId: string
 }): ReactElement {
   const [isOpen, setOpen] = useState<boolean>(false)
-  const lootContainer = loot.useContainer()
-  const {
-    approveLootTransactions: approve,
-    isApproved,
-    enterTheDungeon,
-  } = lootContainer
-
-  const { refreshDungeonState } = dungeon.useContainer()
 
   return (
     <div className="center">
@@ -146,14 +145,7 @@ export default function NotStarted({
         onRequestClose={() => setOpen(false)}
         contentLabel="Enter the cave modal"
       >
-        <NotStartedModal
-          isApproved={isApproved}
-          approve={approve}
-          enterTheDungeon={enterTheDungeon}
-          tokenId={tokenId}
-          closeModal={() => setOpen(false)}
-          refreshDungeonState={refreshDungeonState}
-        />
+        <NotStartedModal tokenId={tokenId} closeModal={() => setOpen(false)} />
       </Modal>
     </div>
   )

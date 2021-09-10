@@ -81,14 +81,11 @@ function Head(): ReactElement {
  */
 function Header(): ReactElement {
   // Network state
-  const { address, unlock, loadStoredWallet } = wallet.useContainer()
-  const { refreshIsApproved } = loot.useContainer()
+  const { address, unlock, loadStoredWallet, wrongNetwork } =
+    wallet.useContainer()
 
   useEffect(() => {
     loadStoredWallet()
-    if (address) {
-      refreshIsApproved()
-    }
   }, [address])
 
   return (
@@ -104,11 +101,17 @@ function Header(): ReactElement {
       <div className={styles.auth_button}>
         <Button onClick={() => unlock()}>
           <div className={styles.content}>
-            {address ? <div className={styles.green_dot} /> : null}
-            {address
+            {wrongNetwork ? (
+              <div className={styles.wrongNetwork}>Wrong Network!</div>
+            ) : null}
+            {!wrongNetwork && address ? (
+              <div className={styles.green_dot} />
+            ) : null}
+            {!wrongNetwork && address
               ? // Truncate address if authenticated
                 address.substr(0, 5) + '...' + address.slice(address.length - 3)
-              : 'Connect Wallet'}
+              : null}
+            {!wrongNetwork && !address ? 'Connect Wallet' : null}
           </div>
         </Button>
       </div>

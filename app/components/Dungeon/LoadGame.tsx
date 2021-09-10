@@ -2,16 +2,17 @@ import Button from '@components/Button'
 import Input from '@components/Input'
 import wallet from '@state/wallet'
 import styles from '@styles/components/Dungeon.module.scss'
+import { NetworkId } from '@utils/networkIdToName'
+import Link from 'next/link'
 import classnames from 'classnames'
 import { useRouter } from 'next/router'
-import { ChangeEvent, ReactElement, useState } from 'react'
+import React, { ChangeEvent, ReactElement, useState } from 'react'
 
 export default function LoadGame({
   title = 'Welcome to the dungeon',
   path = 'dungeon',
 }): ReactElement {
-  const { address }: { address: string | null; unlock: Function } =
-    wallet.useContainer()
+  const { address, networkId } = wallet.useContainer()
 
   const [tokenId, setTokenId] = useState<string>('')
   const router = useRouter()
@@ -54,6 +55,12 @@ export default function LoadGame({
           <div>Continue with Loot #{tokenId}</div>
         </Button>
       </form>
+      {networkId === NetworkId.polygon ? (
+        <div className="center">
+          <h5>Don't have Loot? Claim one here</h5>
+          <Link href="/claim">Claim PolyMLoot</Link>
+        </div>
+      ) : null}
     </div>
   )
 }

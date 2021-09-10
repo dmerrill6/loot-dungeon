@@ -1,7 +1,8 @@
-import { BATTLE_PRICE, ESCAPE_PRICE } from '@constants/fees'
+import { getBattlePrice, getEscapePrice } from '@constants/fees'
+import networkIdToName from '@utils/networkIdToName'
 import React from 'react'
 
-export default [
+export default (networkId: number | null) => [
   {
     q: 'What is Loot Dungeon?',
     a: (
@@ -33,8 +34,8 @@ export default [
           smart contract. From that point, you have 24 hours to either fight or
           escape from the encountered monster. If you die in the battle, you
           lose your Loot unless you pay the Ferryman's fee (starts at 0.05 ETH
-          and increases linearly. Be sure to check the current value before
-          entering the dungeon!).
+          for mainnet and increases linearly. Be sure to check the current value
+          before entering the dungeon!).
         </p>
         <p>
           Also by participating you are trusting the correctness of the
@@ -183,11 +184,12 @@ export default [
     a: (
       <p>
         Apart from gas costs, these are the fees for participating: Battling an
-        enemy costs {BATTLE_PRICE} ETH (this amount is used to cover the
-        Chainlink expenses for getting random numbers). Escaping costs{' '}
-        {ESCAPE_PRICE} ETH. The death penalty is losing your Loot or paying the
-        Ferryman's fee, which starts at 0.05 ETH and increases by 0.005 ETH
-        everytime someone enters the dungeon.
+        enemy costs {getBattlePrice(networkIdToName(networkId))} (this amount is
+        used to cover the Chainlink expenses for getting random numbers).
+        Escaping costs {getEscapePrice(networkIdToName(networkId))} ETH. The
+        death penalty is losing your Loot or paying the Ferryman's fee, which
+        starts at 0.05 ETH and increases by 0.005 ETH everytime someone enters
+        the dungeon.
       </p>
     ),
   },

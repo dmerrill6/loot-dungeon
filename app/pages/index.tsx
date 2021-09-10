@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Layout from '@components/Layout'
@@ -6,15 +6,28 @@ import styles from '@styles/pages/Home.module.scss'
 import Link from 'next/link'
 import Button from '@components/Button'
 import { useRouter } from 'next/router'
+import getNetworkIdFromSubdomain from '@utils/getNetworkFromSubdomain'
+import getSubdomain from '@utils/getSubdomain'
+import { NetworkId } from '@utils/networkIdToName'
 
 const Home: NextPage = () => {
   const router = useRouter()
+
+  const subdomainNetworkId = useMemo(
+    () => getNetworkIdFromSubdomain(getSubdomain()),
+    []
+  )
 
   return (
     <Layout>
       <div className={styles.container}>
         <div className={styles.title}>
-          <h1>Loot Dungeon</h1>
+          {subdomainNetworkId === NetworkId.mainnet ? (
+            <h1>Loot Dungeon</h1>
+          ) : null}
+          {subdomainNetworkId === NetworkId.polygon ? (
+            <h1>[Poly]Loot Dungeon</h1>
+          ) : null}
         </div>
         <p className={styles.subtitle}>
           Bring your Loot. Battle monsters. Earn NFT rewards.
@@ -50,6 +63,28 @@ const Home: NextPage = () => {
         >
           Enter the Dungeon
         </Button>
+        {subdomainNetworkId === NetworkId.mainnet ? (
+          <div className={styles.alternative}>
+            <h4>Don't have any Loot to stake?</h4>
+            <Button
+              style="secondary"
+              onClick={() => router.push('https://polygon.lootdungeon.app')}
+            >
+              Try the PolyLoot Dungeon
+            </Button>
+          </div>
+        ) : null}
+        {subdomainNetworkId === NetworkId.polygon ? (
+          <div className={styles.alternative}>
+            <h4>Ready to try the mainnet version?</h4>
+            <Button
+              style="secondary"
+              onClick={() => router.push('https://lootdungeon.app')}
+            >
+              Go to Loot Dungeon at Mainnet
+            </Button>
+          </div>
+        ) : null}
         <div className={styles.main_link}>
           <Link href="/faq">FAQ</Link>
         </div>
@@ -63,7 +98,11 @@ const Home: NextPage = () => {
           <a
             target="_blank"
             rel="noreferrer"
-            href="https://etherscan.io/address/0xdc9d70e37662ce16615224efaa9bb2315b80e36b"
+            href={
+              subdomainNetworkId === NetworkId.polygon
+                ? 'https://polygonscan.com/address/0x54a87d8aef21e3e8aa3192f928f125496e20d159'
+                : `https://etherscan.io/address/0xdc9d70e37662ce16615224efaa9bb2315b80e36b`
+            }
           >
             Smart contract
           </a>
@@ -72,7 +111,11 @@ const Home: NextPage = () => {
           <a
             target="_blank"
             rel="noreferrer"
-            href={`https://opensea.io/collection/loot-dungeon`}
+            href={
+              subdomainNetworkId === NetworkId.polygon
+                ? `https://opensea.io/collection/polyloot-dungeon`
+                : `https://opensea.io/collection/loot-dungeon`
+            }
           >
             OpenSea
           </a>
