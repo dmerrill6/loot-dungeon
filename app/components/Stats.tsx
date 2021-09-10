@@ -21,7 +21,6 @@ export default function Dungeon({
     if (tokenId) {
       getPlayerStats(tokenId)
         .then((stats) => {
-          console.log('got stats', stats)
           setStats(stats)
         })
         .catch((error) => console.log(error))
