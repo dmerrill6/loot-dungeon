@@ -369,6 +369,7 @@ function useLoot() {
         value: await getFerrymanAgreedPrice(tokenId),
       })
       await tx.wait(1)
+      setEncounteredMonsters({})
       toast.success(
         'You bribed the ferryman. You came back to life and the Loot bag is back at your account.'
       )
@@ -384,6 +385,7 @@ function useLoot() {
     try {
       const tx = await loot['claim(uint256)'](tokenId)
       await tx.wait(1)
+      setEncounteredMonsters({})
       toast.success(`Loot #${tokenId} was claimed successfully`)
     } catch (e) {
       console.log(e)
